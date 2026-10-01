@@ -1,0 +1,76 @@
+/* Reglas de Impresión A4 de Alta Fidelidad para CV Wizard Open Source */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0mm; /* Elimina márgenes impuestos por el navegador (fechas, URLs, etc.) */
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Ocultar ÚNICAMENTE elementos de la interfaz de la webapp (NO tags genéricos como aside o header) */
+  .no-print,
+  .editor-pane,
+  .zoom-controls {
+    display: none !important;
+  }
+
+  /* Desbloquear overflow en todos los contenedores padre para permitir el flujo de impresión */
+  html, body, div, section, main {
+    overflow: visible !important;
+  }
+
+  /* Resetear los contenedores del visor para que ocupen el flujo de la hoja */
+  .preview-pane,
+  .preview-viewport,
+  .zoom-wrapper {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    transform: none !important;
+  }
+
+  /* La hoja A4 física del CV */
+  #cv-print-area,
+  .a4-sheet {
+    display: flex !important;
+    position: relative !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    transform: none !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* Asegurar que las plantillas que no son flex muestren su contenedor al 100% */
+  .a4-sheet > div {
+    width: 100% !important;
+    min-height: 297mm !important;
+  }
+
+  /* Evitar saltos de página dentro de bloques de experiencia o educación */
+  .avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
