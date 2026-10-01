@@ -44,3 +44,4 @@ Esta regla rige el ciclo de vida de desarrollo de software en este proyecto y wo
 - NUNCA escribir componentes o lógica sin antes haber fijado los contratos de tipos en `types/`.
 - NUNCA saltear una compuerta de aprobación (Gate).
 - Si surge ambigüedad, pausar y consultar; no asumir ni inventar requisitos.
+- Cumplir estrictamente la Política de Commits establecida en [commit-policy.md](commit-policy.md), garantizando la trazabilidad hacia las tareas y fases SDD.
