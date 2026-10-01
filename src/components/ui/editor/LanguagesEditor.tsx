@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { LanguageItem } from '../../types/cv';
+import type { LanguageItem } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
 import { Languages, Plus, Trash2 } from 'lucide-react';
 

@@ -61,6 +61,8 @@ flowchart TD
 
 ## 3. Estructura de Directorios del Proyecto
 
+> **Nota de Decisión Arquitectónica (ADR):** Los componentes de edición de formularios se agrupan bajo `src/components/ui/editor/` junto con los elementos atómicos de interfaz (`src/components/ui/`), consolidando las responsabilidades de UI y separándolas del motor de renderizado de plantillas (`src/components/preview/`) y del orquestador global (`CVApp.tsx`).
+
 ```
 /home/jotace/Proyectos/Práctica SDD/
 ├── specs/                          # Artefactos vivos de SDD
@@ -70,27 +72,30 @@ flowchart TD
 ├── public/                         # Favicon, assets públicos
 ├── src/
 │   ├── components/
-│   │   ├── editor/                 # Componentes del formulario de entrada
-│   │   │   ├── SectionHeader.tsx   # Título de sección colapsable
-│   │   │   ├── ProfileEditor.tsx   # Datos de contacto y resumen
-│   │   │   ├── ExperienceEditor.tsx# Lista dinámica de experiencias
-│   │   │   ├── EducationEditor.tsx # Lista dinámica de formación
-│   │   │   ├── SkillsEditor.tsx    # Habilidades y nivel
-│   │   │   ├── LanguagesEditor.tsx # Idiomas y competencia
-│   │   │   └── SettingsEditor.tsx  # Color de acento, fuente y plantilla
+│   │   ├── ui/                     # Interfaz de usuario y componentes de interacción
+│   │   │   ├── Toolbar.tsx         # Barra superior: Descargar PDF, Rellenar ejemplo, Limpiar, Exportar/Importar JSON
+│   │   │   └── editor/             # Componentes del formulario de entrada
+│   │   │       ├── SectionCard.tsx     # Tarjeta contenedora de sección colapsable
+│   │   │       ├── ProfileEditor.tsx   # Datos de contacto y resumen
+│   │   │       ├── ExperienceEditor.tsx# Lista dinámica de experiencias
+│   │   │       ├── EducationEditor.tsx # Lista dinámica de formación
+│   │   │       ├── SkillsEditor.tsx    # Habilidades y nivel
+│   │   │       ├── LanguagesEditor.tsx # Idiomas y competencia
+│   │   │       └── SettingsEditor.tsx  # Color de acento, fuente y plantilla
 │   │   ├── preview/                # Renderizado de la hoja A4
 │   │   │   ├── ResumeViewer.tsx    # Contenedor escalable con controles de zoom
 │   │   │   └── templates/          # Plantillas de CV desacopladas
 │   │   │       ├── ModernTemplate.tsx
 │   │   │       ├── ClassicTemplate.tsx
 │   │   │       └── MinimalTemplate.tsx
-│   │   ├── ui/                     # Componentes atómicos de UI (botones, inputs, toolbar)
-│   │   │   ├── Toolbar.tsx         # Barra superior: Descargar PDF, Rellenar ejemplo, Limpiar, Exportar/Importar JSON
-│   │   │   └── PrintStyles.css     # Reglas CSS específicas para @media print
 │   │   └── CVApp.tsx               # Orquestador principal de la isla reactiva
 │   ├── data/
 │   │   ├── initialData.ts          # Estado vacío inicial
 │   │   └── sampleData.ts           # Datos de muestra realistas para probar con un clic
+│   ├── styles/
+│   │   ├── design-tokens.css       # Tokens exportados desde DESIGN.md
+│   │   ├── global.css              # Reset y directivas globales
+│   │   └── print.css               # Reglas CSS específicas para @media print
 │   ├── types/
 │   │   └── cv.ts                   # Contratos de tipos TypeScript
 │   ├── utils/
@@ -99,7 +104,6 @@ flowchart TD
 │   └── pages/
 │       └── index.astro             # Entrada de la webapp Astro (carga la isla CVApp)
 ├── astro.config.mjs
-├── tailwind.config.mjs (o CSS v4)
 ├── package.json
 └── tsconfig.json
 ```

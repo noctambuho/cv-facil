@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Profile } from '../../types/cv';
+import type { Profile } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
 import { User, Mail, Phone, MapPin, Globe, Linkedin, Github, FileText, Image } from 'lucide-react';
 

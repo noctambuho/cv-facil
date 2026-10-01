@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CVSettings, TemplateId, FontFamily } from '../../types/cv';
+import type { CVSettings, TemplateId, FontFamily } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
 import { Palette, LayoutTemplate, Type, Check } from 'lucide-react';
 

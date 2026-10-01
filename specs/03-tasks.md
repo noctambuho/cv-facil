@@ -77,23 +77,23 @@ gantt
 
 ## Hito 3: Formularios Modulares del Editor (UI Reactiva)
 
-- [x] **TASK-3.1: Formulario de Perfil (`src/components/editor/ProfileEditor.tsx`)**
+- [x] **TASK-3.1: Formulario de Perfil (`src/components/ui/editor/ProfileEditor.tsx`)**
   - **Descripción:** Campos para nombre, titular profesional, email, teléfono, ciudad/país, sitio web, LinkedIn, GitHub y resumen profesional.
   - **Criterio de Éxito:** Al escribir cualquier letra, se refleja instantáneamente en la plantilla sin pérdida de foco.
 
-- [x] **TASK-3.2: Formulario de Experiencia Laboral (`src/components/editor/ExperienceEditor.tsx`)**
+- [x] **TASK-3.2: Formulario de Experiencia Laboral (`src/components/ui/editor/ExperienceEditor.tsx`)**
   - **Descripción:** Lista dinámica con botones para "Añadir Puesto", campos para empresa, cargo, ubicación, fecha inicio, fecha fin, checkbox "Trabajo actual", descripción y botón para eliminar.
   - **Criterio de Éxito:** Permite agregar y borrar puestos dinámicamente.
 
-- [x] **TASK-3.3: Formulario de Educación (`src/components/editor/EducationEditor.tsx`)**
+- [x] **TASK-3.3: Formulario de Educación (`src/components/ui/editor/EducationEditor.tsx`)**
   - **Descripción:** Lista dinámica para formación académica (institución, título, campo de estudio, fechas y descripción).
   - **Criterio de Éxito:** Soporta múltiples titulaciones con actualización reactiva.
 
-- [x] **TASK-3.4: Formulario de Habilidades e Idiomas (`src/components/editor/SkillsEditor.tsx` & `LanguagesEditor.tsx`)**
+- [x] **TASK-3.4: Formulario de Habilidades e Idiomas (`src/components/ui/editor/SkillsEditor.tsx` & `LanguagesEditor.tsx`)**
   - **Descripción:** Lista de habilidades con selector de nivel (`basic`, `intermediate`, `advanced`) y lista de idiomas con nivel de fluidez.
   - **Criterio de Éxito:** Cumple estrictamente con el enum acordado en el diseño técnico.
 
-- [x] **TASK-3.5: Personalización y Ajustes de Plantilla (`src/components/editor/SettingsEditor.tsx`)**
+- [x] **TASK-3.5: Personalización y Ajustes de Plantilla (`src/components/ui/editor/SettingsEditor.tsx`)**
   - **Descripción:** Selector de plantilla (Moderna, Clásica, Minimalista), selector de color de acento interactivo y selector de familia tipográfica.
   - **Criterio de Éxito:** Cambia la plantilla activa y los colores de forma inmediata.
 

@@ -3,12 +3,12 @@ import type { CVData, Profile, ExperienceItem, EducationItem, SkillItem, Languag
 import { loadCVData, saveCVData } from '../utils/storage';
 import { sampleData } from '../data/sampleData';
 import { Toolbar } from './ui/Toolbar';
-import { ProfileEditor } from './editor/ProfileEditor';
-import { ExperienceEditor } from './editor/ExperienceEditor';
-import { EducationEditor } from './editor/EducationEditor';
-import { SkillsEditor } from './editor/SkillsEditor';
-import { LanguagesEditor } from './editor/LanguagesEditor';
-import { SettingsEditor } from './editor/SettingsEditor';
+import { ProfileEditor } from './ui/editor/ProfileEditor';
+import { ExperienceEditor } from './ui/editor/ExperienceEditor';
+import { EducationEditor } from './ui/editor/EducationEditor';
+import { SkillsEditor } from './ui/editor/SkillsEditor';
+import { LanguagesEditor } from './ui/editor/LanguagesEditor';
+import { SettingsEditor } from './ui/editor/SettingsEditor';
 import { ResumeViewer } from './preview/ResumeViewer';
 import { Edit3, Eye, ArrowLeft, Sparkles } from 'lucide-react';
 

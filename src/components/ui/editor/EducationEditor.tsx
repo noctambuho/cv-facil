@@ -1,5 +1,5 @@
 import React from 'react';
-import type { EducationItem } from '../../types/cv';
+import type { EducationItem } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
 import { GraduationCap, Plus, Trash2, Calendar, BookOpen } from 'lucide-react';
 

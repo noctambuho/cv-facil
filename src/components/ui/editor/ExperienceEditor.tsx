@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ExperienceItem } from '../../types/cv';
+import type { ExperienceItem } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
 import { Briefcase, Plus, Trash2, Calendar, MapPin, Building } from 'lucide-react';
 

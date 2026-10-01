@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { SkillItem, SkillLevel } from '../../types/cv';
+import type { SkillItem, SkillLevel } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
 import { Award, Plus, Trash2 } from 'lucide-react';
 
