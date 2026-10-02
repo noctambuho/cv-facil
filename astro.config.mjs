@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://noctambuho.github.io',
-  base: process.env.NODE_ENV === 'production' ? '/practica-sdd-cv-maker' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/cv-facil' : '/',
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()]
