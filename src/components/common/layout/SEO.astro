@@ -1,0 +1,89 @@
+---
+/**
+ * src/components/common/layout/SEO.astro
+ * Componente maestro de metadatos SEO y Rich Snippets para el mercado hispanohablante.
+ * Trazabilidad: specs/05-arquitectura-cv-facil-v2.md (Sección 6)
+ */
+
+export interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  ogType?: 'website' | 'article';
+}
+
+const {
+  title = 'CV Fácil - Crear Currículum Vitae Gratis en PDF A4 Online',
+  description = 'Crea, edita y descarga tu currículum vitae profesional en formato PDF A4 en tiempo real. 100% gratuito, sin marcas de agua y con privacidad total.',
+  canonicalUrl = Astro.url.href,
+  ogType = 'website',
+} = Astro.props;
+
+const baseUrl = import.meta.env.BASE_URL;
+const ogImageUrl = `${Astro.site || 'https://cvfacil.app'}${baseUrl.replace(/\/$/, '')}/og-image.png`;
+
+const schemaJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  'name': 'CV Fácil',
+  'url': canonicalUrl,
+  'applicationCategory': 'BusinessApplication',
+  'operatingSystem': 'All',
+  'inLanguage': 'es',
+  'offers': {
+    '@type': 'Offer',
+    'price': '0',
+    'priceCurrency': 'USD',
+  },
+  'description': description,
+  'featureList': [
+    'Generador de CV en tiempo real en formato A4',
+    'Sin marcas de agua',
+    'Soberanía de datos: Almacenamiento local o Google Drive BYOS',
+    'Optimización de tamaño de PDF < 2MB para portales ATS',
+    'Modo oscuro nativo'
+  ],
+};
+---
+
+<!-- Meta Etiquetas Primarias SEO en Español -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="keywords" content="crear curriculum vitae gratis, hacer cv online pdf, plantillas de curriculum sin marca de agua, generador de cv gratis local, curriculum vitae profesional argentina, curriculum vitae mexico, curriculum vitae espana, cv a4 gratis" />
+<meta name="robots" content="index, follow" />
+<meta name="language" content="Spanish" />
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Geo-targeting e Internacionalización -->
+<link rel="alternate" hreflang="es" href={canonicalUrl} />
+<link rel="alternate" hreflang="es-ES" href={canonicalUrl} />
+<link rel="alternate" hreflang="es-MX" href={canonicalUrl} />
+<link rel="alternate" hreflang="es-AR" href={canonicalUrl} />
+<link rel="alternate" hreflang="es-CO" href={canonicalUrl} />
+<link rel="alternate" hreflang="es-CL" href={canonicalUrl} />
+<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:locale:alternate" content="es_MX" />
+<meta property="og:locale:alternate" content="es_AR" />
+<meta property="og:locale:alternate" content="es_CO" />
+<meta property="og:locale:alternate" content="es_CL" />
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalUrl} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<!-- Datos Estructurados Schema.org (JSON-LD) -->
+<script type="application/ld+json" set:html={JSON.stringify(schemaJsonLd)} />

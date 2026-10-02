@@ -12,7 +12,7 @@ export const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) 
   const [newSkillName, setNewSkillName] = useState('');
   const [newSkillLevel, setNewSkillLevel] = useState<SkillLevel>('intermediate');
 
-  const handleAdd = (e?: React.FormEvent) => {
+  const handleAdd = (e?: React.SyntheticEvent) => {
     if (e) e.preventDefault();
     if (!newSkillName.trim()) return;
 

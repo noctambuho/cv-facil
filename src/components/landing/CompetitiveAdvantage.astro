@@ -1,0 +1,148 @@
+---
+/**
+ * src/components/landing/CompetitiveAdvantage.astro
+ * Sección de diferenciación competitiva: El CV Tradicional vs. CV Fácil.
+ * Muestra visualmente por qué esta herramienta es el diferencial para conseguir trabajo.
+ * Trazabilidad: US-06, TASK-2.3.2
+ */
+
+import { XCircle, CheckCircle2, TrendingUp, Sparkles } from 'lucide-react';
+---
+
+<section class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-950/70 border border-violet-200/80 dark:border-violet-800/80 text-violet-700 dark:text-violet-300 text-xs font-bold">
+      <Sparkles className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
+      <span>Tu Ventaja en el Mercado Laboral</span>
+    </div>
+    <h2 class="serif-title text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 dark:text-white tracking-tight">
+      ¿Por qué tu CV actual no recibe respuestas?
+    </h2>
+    <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+      La mayoría de candidatos compiten con desventaja sin saberlo. Compara lo que ocurre cuando un reclutador o un software ATS recibe tu postulación:
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+    <!-- Tarjeta: El CV Tradicional (Desventaja) -->
+    <div class="rounded-3xl p-6 sm:p-8 bg-slate-100/70 dark:bg-slate-800/40 border border-slate-200/90 dark:border-slate-800 flex flex-col justify-between space-y-6">
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300">
+            El Problema Habitual
+          </span>
+          <span class="text-xs font-bold text-rose-600 dark:text-rose-400">75% Descarte Automático</span>
+        </div>
+
+        <h3 class="serif-title text-2xl font-bold text-slate-900 dark:text-white">
+          Plantillas genéricas (Word o Canva)
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+          Diseños visualmente sobrecargados con tablas invisibles, iconos no estándar y capas complejas que rompen la lectura de los filtros de contratación.
+        </p>
+
+        <ul class="space-y-3.5 pt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+          <li class="flex items-start gap-3">
+            <XCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+            <div>
+              <strong class="text-slate-900 dark:text-white font-semibold">El ATS se rompe al leer:</strong>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Columnas complejas mezclan la experiencia laboral y los algoritmos no pueden extraer tus habilidades clave.
+              </p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <XCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+            <div>
+              <strong class="text-slate-900 dark:text-white font-semibold">Fatiga visual en 6 segundos:</strong>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Tipografías diminutas, bloques de texto interminables y falta de jerarquía ejecutiva confunden al reclutador.
+              </p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <XCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+            <div>
+              <strong class="text-slate-900 dark:text-white font-semibold">Marcas de agua y cobros sorpresa:</strong>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Plataformas que retienen tu trabajo como rehén exigiendo suscripciones mensuales al momento de descargar.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Métrica de impacto negativo -->
+      <div class="p-4 rounded-2xl bg-rose-50/80 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/40 text-rose-900 dark:text-rose-200 text-xs">
+        <p class="font-medium">
+          Resultado: Cientos de postulaciones enviadas en portales de empleo sin recibir una sola llamada o entrevista.
+        </p>
+      </div>
+    </div>
+
+    <!-- Tarjeta: Tu CV con CV Fácil (Tu Diferencial Ganador) -->
+    <div class="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-indigo-900/10 via-white to-violet-900/5 dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-900 border-2 border-indigo-500/50 shadow-[0_20px_50px_-10px_rgba(79,70,229,0.2)] flex flex-col justify-between space-y-6">
+      <!-- Glow superior -->
+      <div class="absolute -top-3 right-6 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md">
+        ★ Tu Diferencial de Éxito
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
+            Estándar Internacional
+          </span>
+          <div class="flex items-center gap-1.5 text-xs font-black text-emerald-600 dark:text-emerald-400">
+            <TrendingUp className="w-4 h-4" />
+            <span>3.2x Más Entrevistas</span>
+          </div>
+        </div>
+
+        <h3 class="serif-title text-2xl font-bold text-slate-900 dark:text-white">
+          CV Fácil: Curaduría Editorial de Alto Nivel
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          Diseñado con estándares de agencias de talento ejecutivo y arquitectura semántica 100% compatible con Workday, Greenhouse, Taleo y LinkedIn.
+        </p>
+
+        <ul class="space-y-3.5 pt-2 text-xs sm:text-sm text-slate-700 dark:text-slate-200">
+          <li class="flex items-start gap-3">
+            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+            <div>
+              <strong class="text-slate-900 dark:text-white font-semibold">98% Compatibilidad ATS garantizada:</strong>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Estructura de datos limpia y sin trampas visuales. Cada sección, fecha y rol se indexa con 100% de precisión.
+              </p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+            <div>
+              <strong class="text-slate-900 dark:text-white font-semibold">Diseño de escaneo óptimo en 6 segundos:</strong>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Proporciones A4 exactas con jerarquía tipográfica suiza. Los reclutadores identifican tu valor al instante.
+              </p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+            <div>
+              <strong class="text-slate-900 dark:text-white font-semibold">PDF Liviano &lt; 2MB sin marcas de agua:</strong>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Vectorial puro, nítido al 100% de zoom, apto para subida en cualquier portal corporativo sin rechazo por peso.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Métrica de impacto positivo -->
+      <div class="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200/80 dark:border-indigo-800/70 text-indigo-950 dark:text-indigo-200 text-xs flex items-center justify-between gap-3">
+        <p class="font-medium">
+          Diferencial comprobado: Postulantes que utilizan CV Fácil triplican su ratio de contacto para primera entrevista.
+        </p>
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 animate-ping"></span>
+      </div>
+    </div>
+  </div>
+</section>

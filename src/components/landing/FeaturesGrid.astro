@@ -1,0 +1,133 @@
+---
+/**
+ * src/components/landing/FeaturesGrid.astro
+ * Cuadrícula Bento de características y ventajas competitivas basada en el diseño de Stitch MCP.
+ * Trazabilidad: US-06 (Criterio 6.1 y 6.2), TASK-2.3.2
+ */
+
+import { Cpu, Eye, FileDown, Lock, Check, Layers, ArrowUpRight } from 'lucide-react';
+import { getRoute } from '../../utils/routes';
+
+const editorHref = getRoute('/editor');
+---
+
+<section class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
+    <span class="inline-block py-1 px-3.5 rounded-full bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200/80 dark:border-indigo-800/80 text-indigo-700 dark:text-indigo-300 text-xs font-bold tracking-wider uppercase">
+      Ingeniería para tu Éxito Laboral
+    </span>
+    <h2 class="serif-title text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 dark:text-white tracking-tight">
+      Un proceso diseñado para que consigas la entrevista
+    </h2>
+    <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+      Eliminamos la fricción técnica y los errores comunes de maquetación para que puedas concentrarte en contar tu historia profesional con máxima autoridad.
+    </p>
+  </div>
+
+  <!-- Bento Grid de Stitch MCP -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Card 1: Estructura Curatorial ATS (1 Col) -->
+    <div class="md:col-span-1 p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-ambient hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+      <div>
+        <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <Cpu className="w-6 h-6" />
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+          Supera los Filtros
+        </span>
+        <h3 class="serif-title text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+          Estructura Semántica ATS
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+          Cada bloque de experiencia, fechas y competencias está formateado en etiquetas semánticas estándar que los analizadores de CV leen sin perder una sola coma.
+        </p>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs text-indigo-600 dark:text-indigo-400 font-semibold">
+        <span>Tasa de parsing: 98%</span>
+        <Check className="w-4 h-4 text-emerald-500" />
+      </div>
+    </div>
+
+    <!-- Card 2: Edición Visual Sin Esfuerzo (2 Cols - Hero Card) -->
+    <div class="md:col-span-2 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-700 text-white relative overflow-hidden group shadow-[0_20px_50px_-10px_rgba(79,70,229,0.35)] flex flex-col justify-between">
+      <!-- Glow decorativo de fondo -->
+      <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none group-hover:scale-125 transition-transform duration-700"></div>
+
+      <div class="relative z-10 space-y-4 max-w-lg">
+        <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center mb-4">
+          <Eye className="w-6 h-6" />
+        </div>
+        <span class="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold uppercase tracking-wider">
+          Previsualización A4 en Vivo
+        </span>
+        <h3 class="serif-title text-2xl sm:text-3xl font-bold text-white leading-tight">
+          Edición visual en tiempo real. Exactamente lo que ves es lo que el reclutador recibe.
+        </h3>
+        <p class="text-indigo-100 text-xs sm:text-sm leading-relaxed">
+          Olvídate de tablas de Word que se descalabran al mover una imagen o plantillas de Canva que cortan texto. Cada cambio se renderiza milimétricamente en lienzo A4 en tiempo real.
+        </p>
+      </div>
+
+      <div class="relative z-10 mt-8 pt-4 flex flex-wrap items-center justify-between gap-4 border-t border-white/20">
+        <div class="flex items-center gap-2 text-xs font-medium text-indigo-100">
+          <Layers className="w-4 h-4 text-white" />
+          <span>3 familias tipográficas profesionales incluidas</span>
+        </div>
+        <a
+          href={editorHref}
+          class="inline-flex items-center gap-1 px-4 py-2 rounded-xl bg-white text-indigo-700 font-bold text-xs hover:bg-indigo-50 transition shadow-sm"
+        >
+          <span>Probar en el Editor</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 3: Exportación PDF Ultraligera (2 Cols) -->
+    <div class="md:col-span-2 p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-ambient hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row items-center gap-6 justify-between group">
+      <div class="flex-1 space-y-3">
+        <div class="w-12 h-12 rounded-2xl bg-violet-50 dark:bg-violet-950/80 text-violet-600 dark:text-violet-400 flex items-center justify-center mb-2">
+          <FileDown className="w-6 h-6" />
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">
+          Formato Estándar
+        </span>
+        <h3 class="serif-title text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          PDF Vectorial A4 (&lt; 2MB)
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+          Generación directa con tipografías vectoriales nítidas en cualquier pantalla o impresión. Sin marcas de agua, sin enlaces de autopromoción y con un peso optimizado para superar los límites de carga en portales laborales.
+        </p>
+      </div>
+
+      <div class="w-full md:w-44 h-32 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/60 flex flex-col items-center justify-center gap-2 p-4 text-center shrink-0">
+        <span class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400">100%</span>
+        <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Libre de marcas de agua</span>
+      </div>
+    </div>
+
+    <!-- Card 4: Privacidad y Soberanía Local-First (1 Col) -->
+    <div class="md:col-span-1 p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-ambient hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+      <div>
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <Lock className="w-6 h-6" />
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+          Tus Datos son Tuyos
+        </span>
+        <h3 class="serif-title text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+          Soberanía Total (Local-First)
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+          Tus datos personales y profesionales nunca tocan nuestros servidores. Todo vive en tu propio navegador o en tu Google Drive personal. Nadie monetiza tu búsqueda de trabajo.
+        </p>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+        <span>Cero seguimiento</span>
+        <Check className="w-4 h-4 text-emerald-500" />
+      </div>
+    </div>
+  </div>
+</section>

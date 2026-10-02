@@ -1,0 +1,9 @@
+# Robots.txt para CV Fácil
+User-agent: *
+Allow: /
+# Prohibir rastreo de estados efímeros o IDs de sesión en el editor
+Disallow: /editor?*
+Disallow: /*?id=*
+
+# Mapa del sitio
+Sitemap: https://cvfacil.app/sitemap-index.xml

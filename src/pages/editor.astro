@@ -1,0 +1,25 @@
+---
+/**
+ * src/pages/editor.astro
+ * Editor Reactivo de Currículum en Tiempo Real (/editor).
+ * Trazabilidad: US-01 a US-05, US-08, US-09, US-10, TASK-2.5.1, TASK-2.5.2
+ */
+
+import BaseLayout from '../components/common/layout/BaseLayout.astro';
+import Navbar from '../components/common/layout/Navbar.astro';
+import UnifiedFooter from '../components/common/layout/UnifiedFooter.astro';
+import { ResumeEditorApp } from '../components/editor/ResumeEditorApp';
+---
+
+<BaseLayout
+  title="Editor de Currículum en Vivo (A4) | CV Fácil"
+  description="Diseña y personaliza tu CV en tiempo real con plantillas profesionales, selector de colores, tipografías y exportación optimizada para filtros ATS."
+>
+  <Navbar currentPath="/editor" />
+
+  <main class="flex-1 flex flex-col">
+    <ResumeEditorApp client:load />
+  </main>
+
+  <UnifiedFooter />
+</BaseLayout>

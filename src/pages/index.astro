@@ -1,32 +1,60 @@
 ---
-import '../styles/global.css';
-import { CVApp } from '../components/CVApp';
+/**
+ * src/pages/index.astro
+ * Landing Page pública de "CV Fácil" v2.0 (Renderizado Estático / SSG).
+ * Trazabilidad: US-06 (Criterios 6.1 a 6.3), US-07 (Criterio 7.3), US-10 (Criterio 10.2)
+ */
 
-const baseUrl = import.meta.env.BASE_URL;
-const faviconUrl = `${baseUrl.replace(/\/$/, '')}/favicon.svg`;
+import BaseLayout from '../components/common/layout/BaseLayout.astro';
+import Navbar from '../components/common/layout/Navbar.astro';
+import UnifiedFooter from '../components/common/layout/UnifiedFooter.astro';
+import HeroSection from '../components/landing/HeroSection.astro';
+import CompetitiveAdvantage from '../components/landing/CompetitiveAdvantage.astro';
+import FeaturesGrid from '../components/landing/FeaturesGrid.astro';
+import SuccessStories from '../components/landing/SuccessStories.astro';
+import DonationBanner from '../components/landing/DonationBanner.astro';
+import { getRoute } from '../utils/routes';
+
+const lobbyUrl = getRoute('/lobby');
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <link rel="icon" type="image/svg+xml" href={faviconUrl} />
-    <meta name="generator" content={Astro.generator} />
-    <title>CV Wizard Open Source - Creador de Currículum en Tiempo Real</title>
-    <meta
-      name="description"
-      content="Crea, personaliza y descarga tu currículum en formato PDF A4 en tiempo real, 100% gratuito, open source y sin marcas de agua."
-    />
-    <!-- Tipografías para la app y plantillas -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="bg-slate-100 antialiased selection:bg-blue-600 selection:text-white">
-    <CVApp client:only="react" />
-  </body>
-</html>
+<BaseLayout
+  title="CV Fácil - Crear Currículum Vitae Gratis en PDF A4 Online (Sin Marca de Agua)"
+  description="Crea, personaliza y descarga tu currículum profesional en formato PDF A4 en tiempo real. 100% gratuito, sin marcas de agua, con modo oscuro y almacenamiento local o Google Drive."
+>
+  <!-- Redirección Inteligente de Sesión (US-07 Criterio 7.3) -->
+  <script is:inline define:vars={{ lobbyUrl }}>
+    (function () {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        // Si el usuario solicita explícitamente ver la landing, no redirigir
+        if (urlParams.get('landing') === 'true' || urlParams.get('stay') === 'true') {
+          return;
+        }
+
+        // Si el usuario ya cuenta con un historial de documentos o sesión activa
+        const libraryRaw = localStorage.getItem('cv_facil_library');
+        const legacyData = localStorage.getItem('cv_wizard_data_v1');
+        const sessionActive = localStorage.getItem('cv_facil_active_session');
+
+        if (sessionActive === 'true' && (libraryRaw || legacyData)) {
+          window.location.replace(lobbyUrl);
+        }
+      } catch (e) {
+        // Fallback silencioso si localStorage no está accesible
+      }
+    })();
+  </script>
+
+  <Navbar currentPath="/" />
+
+  <main class="flex-1">
+    <HeroSection />
+    <CompetitiveAdvantage />
+    <FeaturesGrid />
+    <SuccessStories />
+    <DonationBanner />
+  </main>
+
+  <UnifiedFooter />
+</BaseLayout>

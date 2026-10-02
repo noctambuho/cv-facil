@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CVData, TemplateProps } from '../../../types/cv';
+import type { TemplateProps } from '../../../types/cv';
 import { Mail, Phone, MapPin, Globe, Linkedin, Github, Briefcase, GraduationCap, Award, Languages } from 'lucide-react';
 
 const levelLabels = {
@@ -141,9 +141,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           )}
         </div>
 
-        <div className="text-[10px] text-slate-500 pt-4 text-center">
-          CV Profesional
-        </div>
+
       </aside>
 
       {/* Columna Principal (Main Content) */}

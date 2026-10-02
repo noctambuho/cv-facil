@@ -59,6 +59,7 @@ export interface CVSettings {
   accentColor: string; // Hexadecimal, ej: "#1e40af"
   fontFamily: FontFamily;
   showIcons: boolean;
+  showPhoto?: boolean;
 }
 
 export interface CVData {

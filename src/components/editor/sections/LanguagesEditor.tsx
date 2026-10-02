@@ -12,7 +12,7 @@ export const LanguagesEditor: React.FC<LanguagesEditorProps> = ({ languages, onC
   const [name, setName] = useState('');
   const [level, setLevel] = useState('B2 Intermedio');
 
-  const handleAdd = (e?: React.FormEvent) => {
+  const handleAdd = (e?: React.SyntheticEvent) => {
     if (e) e.preventDefault();
     if (!name.trim()) return;
 

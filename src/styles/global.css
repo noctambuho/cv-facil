@@ -2,13 +2,40 @@
 @import "./design-tokens.css";
 @import "./print.css";
 
-/* Estilos de scrollbar y fuentes */
-html {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: var(--color-neutral-dark, #0f172a);
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-bg-canvas: #f8fafc;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #f1f5f9;
+  --color-text-primary: #0f172a;
+  --color-text-muted: #64748b;
+  --color-border-subtle: #e2e8f0;
+  --color-accent: #2563eb;
+  --color-accent-glow: rgba(37, 99, 235, 0.08);
+  --color-danger: #ef4444;
 }
 
-/* Custom scrollbar para el editor */
+.dark {
+  --color-bg-canvas: #0f172a;
+  --color-bg-surface: #1e293b;
+  --color-bg-elevated: #334155;
+  --color-text-primary: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-border-subtle: #334155;
+  --color-accent: #3b82f6;
+  --color-accent-glow: rgba(59, 130, 246, 0.18);
+  --color-danger: #f87171;
+}
+
+/* Estilos base de tipografía y lienzo */
+html {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-canvas);
+}
+
+/* Custom scrollbar adaptativo */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -16,10 +43,90 @@ html {
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: #1e293b;
+}
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 9999px;
 }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+}
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* Tipografía Editorial Stitch ("The Editorial Architect") */
+.serif-title,
+.font-editorial {
+  font-family: 'IBM Plex Serif', 'Merriweather', Georgia, serif;
+}
+
+/* Efectos visuales de Stitch: Luminancia Ambiental y Vidrio Esmerilado */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.shadow-ambient {
+  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(15, 23, 42, 0.04);
+}
+
+.dark .shadow-ambient {
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.4), 0 0 1px 1px rgba(255, 255, 255, 0.06);
+}
+
+/* Animaciones sutiles de inmersión */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-float {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-reverse 7s ease-in-out infinite 1s;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-sweep 3s infinite;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CVData, TemplateProps } from '../../../types/cv';
+import type { TemplateProps } from '../../../types/cv';
 
 const levelLabels = {
   basic: 'Básico',

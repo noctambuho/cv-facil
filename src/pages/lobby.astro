@@ -1,0 +1,25 @@
+---
+/**
+ * src/pages/lobby.astro
+ * Lobby de Gestión de Currículums (Inspirado en ONLYOFFICE).
+ * Trazabilidad: US-07 (Criterios 7.1 a 7.3), TASK-2.4.1, TASK-2.4.2
+ */
+
+import BaseLayout from '../components/common/layout/BaseLayout.astro';
+import Navbar from '../components/common/layout/Navbar.astro';
+import UnifiedFooter from '../components/common/layout/UnifiedFooter.astro';
+import { LobbyDashboard } from '../components/lobby/LobbyDashboard';
+---
+
+<BaseLayout
+  title="Mis Currículums - Lobby de Gestión | CV Fácil"
+  description="Administra, duplica, renombra y crea nuevos currículums en blanco o con plantillas profesionales en tu navegador o en Google Drive."
+>
+  <Navbar currentPath="/lobby" />
+
+  <main class="flex-1">
+    <LobbyDashboard client:load />
+  </main>
+
+  <UnifiedFooter />
+</BaseLayout>

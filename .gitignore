@@ -21,3 +21,4 @@ yarn-error.log*
 # Scratch and debug files
 .gemini/
 scratch/
+lessons/
