@@ -2,7 +2,8 @@
 /**
  * src/pages/index.astro
  * Landing Page pública de "CV Fácil" v2.0 (Renderizado Estático / SSG).
- * Trazabilidad: US-06 (Criterios 6.1 a 6.3), US-07 (Criterio 7.3), US-10 (Criterio 10.2)
+ * Siempre aterriza directamente en la landing page para cualquier visitante.
+ * Trazabilidad: US-06 (Criterios 6.1 a 6.3), US-10 (Criterio 10.2)
  */
 
 import BaseLayout from '../components/common/layout/BaseLayout.astro';
@@ -13,39 +14,12 @@ import CompetitiveAdvantage from '../components/landing/CompetitiveAdvantage.ast
 import FeaturesGrid from '../components/landing/FeaturesGrid.astro';
 import SuccessStories from '../components/landing/SuccessStories.astro';
 import DonationBanner from '../components/landing/DonationBanner.astro';
-import { getRoute } from '../utils/routes';
-
-const lobbyUrl = getRoute('/lobby');
 ---
 
 <BaseLayout
   title="CV Fácil - Crear Currículum Vitae Gratis en PDF A4 Online (Sin Marca de Agua)"
   description="Crea, personaliza y descarga tu currículum profesional en formato PDF A4 en tiempo real. 100% gratuito, sin marcas de agua, con modo oscuro y almacenamiento local o Google Drive."
 >
-  <!-- Redirección Inteligente de Sesión (US-07 Criterio 7.3) -->
-  <script is:inline define:vars={{ lobbyUrl }}>
-    (function () {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        // Si el usuario solicita explícitamente ver la landing, no redirigir
-        if (urlParams.get('landing') === 'true' || urlParams.get('stay') === 'true') {
-          return;
-        }
-
-        // Si el usuario ya cuenta con un historial de documentos o sesión activa
-        const libraryRaw = localStorage.getItem('cv_facil_library');
-        const legacyData = localStorage.getItem('cv_wizard_data_v1');
-        const sessionActive = localStorage.getItem('cv_facil_active_session');
-
-        if (sessionActive === 'true' && (libraryRaw || legacyData)) {
-          window.location.replace(lobbyUrl);
-        }
-      } catch (e) {
-        // Fallback silencioso si localStorage no está accesible
-      }
-    })();
-  </script>
-
   <Navbar currentPath="/" />
 
   <main class="flex-1">

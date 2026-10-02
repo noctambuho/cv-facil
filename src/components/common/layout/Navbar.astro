@@ -35,8 +35,8 @@ const isEditor = currentPath.includes('/editor');
 const isInsideApp = isLobby || isEditor;
 const brandHref = isInsideApp ? lobbyHref : landingHref;
 
-/** "Inicio" desde la app lleva a la landing con ?landing=true para evitar rebote US-07 */
-const inicioHref = isInsideApp ? getRoute('/?landing=true') : landingHref;
+/** "Inicio" lleva directamente a la landing principal */
+const inicioHref = landingHref;
 ---
 
 <header class="no-print sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl transition-colors px-4 sm:px-6 lg:px-8">
