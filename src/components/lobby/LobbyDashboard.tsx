@@ -11,7 +11,7 @@ import { Input } from '../common/primitives/Input';
 import { Button } from '../common/primitives/Button';
 import { initialData } from '../../data/initialData';
 import { sampleData } from '../../data/sampleData';
-import { getRoute } from '../../utils/routes';
+import { getRoute } from '../../services/browser/navigation';
 import { HardDrive, CheckCircle2, ShieldAlert, Sparkles, LogOut, RefreshCw, KeyRound } from 'lucide-react';
 
 /**

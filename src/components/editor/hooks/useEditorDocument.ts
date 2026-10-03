@@ -10,7 +10,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { CVData } from '../../../types/cv';
 import { initialData } from '../../../data/initialData';
 import { sampleData } from '../../../data/sampleData';
-import { sanitizeDocumentId, generateSecureId } from '../../../utils/security';
+import { sanitizeDocumentId, generateSecureId } from '../../../domain/security';
 import { getStorageAdapter } from '../../../services/storage';
 
 export interface UseEditorDocumentReturn {

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import type { CVData } from '../../types/cv';
 import { sampleData } from '../../data/sampleData';
 import { initialData } from '../../data/initialData';
-import { getRoute } from '../../utils/routes';
+import { getRoute } from '../../services/browser/navigation';
 import {
   Download,
   Sparkles,

@@ -7,10 +7,9 @@ import {
   type ExportQualityProfile,
   estimatePdfSizeBytes,
   formatBytes,
-  generatePdfBlob,
-  downloadPdfFile,
-} from '../../utils/pdfExport';
-import { exportToJSON } from '../../utils/storage';
+} from '../../domain/exportEstimate';
+import { generatePdfBlob, downloadPdfFile } from '../../services/pdf/pdfRenderer';
+import { exportToJSON } from '../../services/browser/download';
 import { getStorageAdapter, GoogleDriveAdapter } from '../../services/storage';
 import { GoogleDriveConfigModal } from '../lobby/GoogleDriveConfigModal';
 import {

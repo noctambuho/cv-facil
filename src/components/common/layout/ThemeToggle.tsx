@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
-import { getStoredTheme, toggleTheme, type Theme } from '../../../utils/theme';
+import { getStoredTheme, toggleTheme, type Theme } from '../../../services/browser/theme';
 
 /**
  * ThemeToggle: Botón interactivo accesible para conmutar entre Modo Claro y Oscuro.

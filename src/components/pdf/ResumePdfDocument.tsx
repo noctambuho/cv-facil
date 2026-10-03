@@ -1,53 +1,21 @@
+/**
+ * src/components/pdf/ResumePdfDocument.tsx
+ * Ensamblador del documento PDF para @react-pdf/renderer con metadatos y página A4.
+ * Trazabilidad: US-09, TASK-7.2
+ */
+
 import React from 'react';
-import { Document, Page, StyleSheet, Font } from '@react-pdf/renderer';
+import { Document, Page, StyleSheet } from '@react-pdf/renderer';
 import type { CVData } from '../../types/cv';
+import { getPdfFontName } from '../../domain/cvFormatters';
+import { registerPdfFonts } from '../../services/pdf/pdfFonts';
 import { PdfModernTemplate } from './templates/PdfModernTemplate';
 import { PdfClassicTemplate } from './templates/PdfClassicTemplate';
 import { PdfMinimalTemplate } from './templates/PdfMinimalTemplate';
 
-// Registrar fuentes TrueType para fidelidad tipográfica 1:1 con la previsualización web
-if (typeof window !== 'undefined') {
-  const base = (import.meta.env?.BASE_URL || '/').replace(/\/$/, '');
-  const origin = window.location.origin;
-
-  try {
-    Font.register({
-      family: 'Inter',
-      fonts: [
-        { src: `${origin}${base}/fonts/inter/Inter-Regular.ttf`, fontWeight: 'normal' },
-        { src: `${origin}${base}/fonts/inter/Inter-Bold.ttf`, fontWeight: 'bold' },
-      ],
-    });
-
-    Font.register({
-      family: 'Merriweather',
-      fonts: [
-        { src: `${origin}${base}/fonts/merriweather/Merriweather-Regular.ttf`, fontWeight: 'normal' },
-        { src: `${origin}${base}/fonts/merriweather/Merriweather-Bold.ttf`, fontWeight: 'bold' },
-      ],
-    });
-
-    Font.register({
-      family: 'JetBrains Mono',
-      fonts: [
-        { src: `${origin}${base}/fonts/jetbrains-mono/JetBrainsMono-Regular.ttf`, fontWeight: 'normal' },
-        { src: `${origin}${base}/fonts/jetbrains-mono/JetBrainsMono-Bold.ttf`, fontWeight: 'bold' },
-      ],
-    });
-  } catch (err) {
-    console.warn('Error registrando fuentes en cliente:', err);
-  }
-}
-
 interface ResumePdfDocumentProps {
   data: CVData;
 }
-
-const fontMap: Record<string, string> = {
-  sans: 'Inter',
-  serif: 'Merriweather',
-  mono: 'JetBrains Mono',
-};
 
 const styles = StyleSheet.create({
   page: {
@@ -59,9 +27,14 @@ const styles = StyleSheet.create({
   },
 });
 
+/**
+ * [COMPONENTE] Documento raíz para exportación y visualización PDF.
+ */
 export const ResumePdfDocument: React.FC<ResumePdfDocumentProps> = ({ data }) => {
+  registerPdfFonts();
+
   const templateId = data.settings.templateId || 'modern';
-  const fontFamily = fontMap[data.settings.fontFamily] || 'Inter';
+  const fontFamily = getPdfFontName(data.settings.fontFamily);
 
   const renderTemplate = () => {
     switch (templateId) {
@@ -75,9 +48,7 @@ export const ResumePdfDocument: React.FC<ResumePdfDocumentProps> = ({ data }) =>
     }
   };
 
-  const documentTitle = data.profile.fullName
-    ? `CV - ${data.profile.fullName}`
-    : 'Curriculum Vitae';
+  const documentTitle = data.profile.fullName ? `CV - ${data.profile.fullName}` : 'Curriculum Vitae';
 
   return (
     <Document

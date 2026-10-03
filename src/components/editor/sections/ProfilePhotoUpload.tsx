@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { User, Image as ImageIcon, Upload, Trash2, AlertCircle } from 'lucide-react';
-import { validateImageFile, compressProfileImage } from '../../../utils/security';
+import { validateImageFile, compressProfileImage } from '../../../services/browser/image';
 
 export interface ProfilePhotoUploadProps {
   avatarUrl: string;

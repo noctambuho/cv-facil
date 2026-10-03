@@ -3,7 +3,7 @@ import type { CVData } from '../../types/cv';
 import { ModernTemplate } from './templates/ModernTemplate';
 import { ClassicTemplate } from './templates/ClassicTemplate';
 import { MinimalTemplate } from './templates/MinimalTemplate';
-import { generatePdfBlob, downloadPdfFile } from '../../utils/pdfRenderer';
+import { generatePdfBlob, downloadPdfFile } from '../../services/pdf/pdfRenderer';
 import {
   ZoomIn,
   ZoomOut,

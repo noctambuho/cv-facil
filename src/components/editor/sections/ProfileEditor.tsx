@@ -3,7 +3,7 @@ import type { Profile } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
 import { ProfilePhotoUpload } from './ProfilePhotoUpload';
 import { User, Mail, Phone, MapPin, Globe, FileText } from 'lucide-react';
-import { sanitizeExternalUrl } from '../../../utils/security';
+import { sanitizeExternalUrl } from '../../../domain/security';
 
 export interface ProfileEditorProps {
   profile: Profile;
