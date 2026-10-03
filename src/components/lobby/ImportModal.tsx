@@ -1,39 +1,44 @@
-import React, { useRef, useState } from 'react';
+/**
+ * src/components/lobby/ImportModal.tsx
+ * Diálogo modal para la importación y validación de archivos JSON de currículum.
+ * Trazabilidad: US-07, TASK-7.6
+ */
+
+import React, { useState } from 'react';
 import { Modal } from '../common/primitives/Modal';
 import { Button } from '../common/primitives/Button';
-import { UploadCloud, AlertCircle, CheckCircle2 } from 'lucide-react';
 import type { CVData } from '../../types/cv';
-import { initialData } from '../../data/initialData';
+import { parseAndSanitizeCVImport } from '../../domain/cvNormalizer';
+import { Upload, FileCode, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export interface ImportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onImportSuccess: (doc: CVData, name: string) => Promise<void>;
+  onImportSuccess: (doc: CVData, suggestedName: string) => void;
 }
 
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+
 /**
- * ImportModal: Diálogo accesible para cargar e importar respaldos de currículum en formato JSON.
- * Valida la estructura básica del documento para garantizar integridad antes de guardar.
- * Trazabilidad: US-07 (Criterio 7.1), TASK-2.4.1
+ * [COMPONENTE] Modal para carga de respaldo JSON de currículum con validación integral.
  */
-export const ImportModal: React.FC<ImportModalProps> = ({
-  isOpen,
-  onClose,
-  onImportSuccess,
-}) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+export const ImportModal: React.FC<ImportModalProps> = ({ isOpen, onClose, onImportSuccess }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      setError('El archivo excede el tamaño máximo permitido de 5MB.');
+      return;
+    }
+
     if (!file.name.endsWith('.json') && file.type !== 'application/json') {
-      setError('Por favor selecciona un archivo con extensión .json válido.');
-      setSelectedFile(null);
+      setError('Por favor selecciona un archivo con formato .json válido.');
       return;
     }
 
@@ -48,34 +53,19 @@ export const ImportModal: React.FC<ImportModalProps> = ({
 
     try {
       const text = await selectedFile.text();
-      const parsed = JSON.parse(text);
+      const result = parseAndSanitizeCVImport(text, selectedFile.name);
 
-      if (!parsed || typeof parsed !== 'object') {
-        throw new Error('El archivo no contiene un objeto JSON legible.');
+      if (!result.valid || !result.data) {
+        setError(result.error || 'No se pudo interpretar la estructura del currículum.');
+        return;
       }
 
-      // Mezclar con valores predeterminados seguros para garantizar integridad de tipos
-      const sanitizedDoc: CVData = {
-        profile: { ...initialData.profile, ...(parsed.profile || {}) },
-        experiences: Array.isArray(parsed.experiences) ? parsed.experiences : [],
-        education: Array.isArray(parsed.education) ? parsed.education : [],
-        skills: Array.isArray(parsed.skills) ? parsed.skills : [],
-        languages: Array.isArray(parsed.languages) ? parsed.languages : [],
-        settings: { ...initialData.settings, ...(parsed.settings || {}) },
-      };
-
-      const docName =
-        selectedFile.name.replace(/\.json$/i, '') ||
-        (sanitizedDoc.profile.fullName ? `CV ${sanitizedDoc.profile.fullName}` : 'CV Importado');
-
-      await onImportSuccess(sanitizedDoc, docName);
-      setSelectedFile(null);
+      onImportSuccess(result.data, result.suggestedTitle || 'Currículum Importado');
       onClose();
     } catch (err: any) {
-      setError('Error al importar el archivo: ' + (err.message || 'Formato no compatible'));
+      setError(err?.message || 'Error inesperado al leer el archivo.');
     } finally {
       setIsProcessing(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -83,59 +73,45 @@ export const ImportModal: React.FC<ImportModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Importar Currículum (JSON)"
-      description="Carga una copia de seguridad generada previamente por CV Fácil."
+      title="Importar Currículum desde Archivo JSON"
+      description="Carga una copia de seguridad .json para editarla de inmediato en tu espacio de trabajo."
       actions={
         <>
-          <Button variant="ghost" onClick={onClose} disabled={isProcessing}>
+          <Button variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
           <Button
             variant="primary"
-            onClick={handleProcessImport}
-            disabled={!selectedFile || isProcessing}
+            disabled={!selectedFile}
             isLoading={isProcessing}
+            onClick={handleProcessImport}
+            leftIcon={<Upload className="w-4 h-4" />}
           >
-            Importar al Lobby
+            Importar y Abrir
           </Button>
         </>
       }
     >
       <div className="space-y-4">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json,application/json"
-          onChange={handleFileChange}
-          className="hidden"
-        />
-
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition bg-slate-50/50 dark:bg-slate-800/30 hover:bg-blue-50/30 dark:hover:bg-blue-950/20"
-        >
-          <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center mb-3">
-            <UploadCloud className="w-6 h-6" />
-          </div>
-
-          <p className="font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-200">
-            {selectedFile ? selectedFile.name : 'Haz clic para seleccionar tu archivo .json'}
-          </p>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-            Solo archivos JSON de copia de seguridad (máximo 5MB)
-          </p>
-        </div>
+        <label className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition bg-slate-50 dark:bg-slate-900/40">
+          <input type="file" accept=".json,application/json" onChange={handleFileChange} className="hidden" />
+          <FileCode className="w-10 h-10 text-slate-400 mb-2" />
+          <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
+            {selectedFile ? selectedFile.name : 'Haz clic o arrastra aquí tu archivo .json'}
+          </span>
+          <span className="text-[11px] text-slate-400 mt-1">Archivos exportados por CV Fácil (máx. 5MB)</span>
+        </label>
 
         {selectedFile && !error && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 text-xs border border-emerald-200/60 dark:border-emerald-800">
+          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 text-xs border border-emerald-200 dark:border-emerald-800">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span className="truncate">Archivo listo para procesar: {selectedFile.name}</span>
+            <span className="truncate">Archivo listo para procesar: <strong>{selectedFile.name}</strong></span>
           </div>
         )}
 
         {error && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-200 text-xs border border-red-200/60 dark:border-red-800">
-            <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-200 text-xs border border-red-200 dark:border-red-900">
+            <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
             <span>{error}</span>
           </div>
         )}

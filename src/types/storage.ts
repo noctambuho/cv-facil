@@ -1,13 +1,13 @@
 /**
  * src/types/storage.ts
- * Definición de tipos para la capa de almacenamiento y metadatos de documentos.
- * Trazabilidad: US-08, TASK-2.2.1
+ * [CONTRATO] Definición de tipos para la capa de almacenamiento y metadatos de documentos.
+ * Trazabilidad: US-08, TASK-7.6
  */
 
 import type { CVData } from './cv';
 
 /**
- * Metadatos inmutables de un currículum en la biblioteca del usuario.
+ * [CONTRATO] Metadatos de un currículum en la biblioteca del usuario.
  */
 export interface CVMetadata {
   /** Identificador único sanitizado (UUIDv4 o ID seguro de Google Drive) */
@@ -25,7 +25,7 @@ export interface CVMetadata {
 }
 
 /**
- * Registro de un documento guardado en LocalStorage.
+ * [CONTRATO] Registro de un documento guardado en LocalStorage.
  */
 export interface LocalDocumentEntry {
   metadata: CVMetadata;
@@ -34,17 +34,15 @@ export interface LocalDocumentEntry {
 }
 
 /**
- * Tipo de proveedor de almacenamiento activo.
+ * [CONTRATO] Tipo de proveedor de almacenamiento activo.
  */
 export type StorageProviderType = 'local' | 'drive';
 
 /**
- * Estado de la sesión y autenticación con Google Drive.
+ * [CONTRATO] Estado de la sesión y autenticación con Google Drive en memoria volátil.
  */
 export interface DriveAuthState {
   isAuthenticated: boolean;
   userEmail?: string;
   userName?: string;
-  userAvatar?: string;
-  folderId?: string;
 }

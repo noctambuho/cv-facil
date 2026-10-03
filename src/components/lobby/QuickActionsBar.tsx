@@ -1,3 +1,10 @@
+/**
+ * src/components/lobby/QuickActionsBar.tsx
+ * [COMPONENTE] Fila superior de acciones rápidas para el Lobby inspirada en ONLYOFFICE.
+ * Permite crear un CV nuevo desde cero, seleccionar una plantilla o importar un respaldo.
+ * Trazabilidad: US-07, TASK-7.6
+ */
+
 import React from 'react';
 import { ActionCard } from '../common/primitives/ActionCard';
 import { FilePlus2, LayoutTemplate, UploadCloud } from 'lucide-react';
@@ -6,14 +13,8 @@ export interface QuickActionsBarProps {
   onCreateBlank: () => void;
   onChooseTemplate: () => void;
   onImportFile: () => void;
-  isCreating?: boolean;
 }
 
-/**
- * QuickActionsBar: Fila superior de acciones rápidas para el Lobby inspirada en ONLYOFFICE.
- * Permite crear un CV nuevo desde cero, seleccionar una plantilla o importar un respaldo.
- * Trazabilidad: US-07 (Criterio 7.1), TASK-2.4.1
- */
 export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({
   onCreateBlank,
   onChooseTemplate,

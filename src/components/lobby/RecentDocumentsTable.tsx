@@ -1,5 +1,12 @@
+/**
+ * src/components/lobby/RecentDocumentsTable.tsx
+ * [COMPONENTE] Tabla centralizada de currículums recientes con filtrado y menú contextual de fila.
+ * Trazabilidad: US-07, TASK-7.6
+ */
+
 import React, { useState } from 'react';
 import type { CVMetadata } from '../../types/storage';
+import { formatDisplayDate } from '../../domain/cvFormatters';
 import { DocumentRowMenu } from './DocumentRowMenu';
 import {
   FileText,
@@ -22,10 +29,6 @@ export interface RecentDocumentsTableProps {
   onCreateNew: () => void;
 }
 
-/**
- * RecentDocumentsTable: Tabla centralizada de currículums recientes con filtrado y menú de fila.
- * Trazabilidad: US-07 (Criterio 7.2), TASK-2.4.2
- */
 export const RecentDocumentsTable: React.FC<RecentDocumentsTableProps> = ({
   documents,
   onOpen,
@@ -46,21 +49,6 @@ export const RecentDocumentsTable: React.FC<RecentDocumentsTableProps> = ({
     if (activeFilter === 'drive') return doc.isDriveSynced;
     return true;
   });
-
-  const formatDate = (isoString: string) => {
-    try {
-      const date = new Date(isoString);
-      return date.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    } catch {
-      return isoString;
-    }
-  };
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
@@ -174,7 +162,7 @@ export const RecentDocumentsTable: React.FC<RecentDocumentsTableProps> = ({
                           {doc.title}
                         </span>
                         <span className="text-[10px] text-slate-400 md:hidden block">
-                          {formatDate(doc.updatedAt)}
+                          {formatDisplayDate(doc.updatedAt)}
                         </span>
                       </div>
                     </div>
@@ -214,7 +202,7 @@ export const RecentDocumentsTable: React.FC<RecentDocumentsTableProps> = ({
                   <td className="py-3 px-4 hidden md:table-cell text-slate-500 dark:text-slate-400">
                     <div className="flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{formatDate(doc.updatedAt)}</span>
+                      <span>{formatDisplayDate(doc.updatedAt)}</span>
                     </div>
                   </td>
 

@@ -13,8 +13,8 @@ interface GoogleDriveConfigModalProps {
 
 /**
  * GoogleDriveConfigModal: Diálogo de configuración para el modelo BYOS (Bring Your Own Storage).
- * Permite al usuario suministrar o verificar su Google Client ID para lanzar la autenticación oficial
- * de Google Identity Services con el permiso estricto https://www.googleapis.com/auth/drive.file.
+ * [COMPONENTE] Diálogo modal para ingresar y validar Google Client ID.
+ * Trazabilidad: US-08, TASK-7.6
  */
 export const GoogleDriveConfigModal: React.FC<GoogleDriveConfigModalProps> = ({
   isOpen,

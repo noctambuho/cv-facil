@@ -13,7 +13,8 @@ export interface DocumentRowMenuProps {
 
 /**
  * DocumentRowMenu: Menú contextual accesible de fila para operaciones atómicas de gestión sobre un CV.
- * Trazabilidad: US-07 (Criterio 7.2), TASK-2.4.2
+ * [COMPONENTE] Menú desplegable para acciones de abrir, renombrar, duplicar, descargar y eliminar.
+ * Trazabilidad: US-07, TASK-7.6
  */
 export const DocumentRowMenu: React.FC<DocumentRowMenuProps> = ({
   onOpen,
