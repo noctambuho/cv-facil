@@ -3,8 +3,9 @@ import { Sun, Moon } from 'lucide-react';
 import { getStoredTheme, toggleTheme, type Theme } from '../../../services/browser/theme';
 
 /**
- * ThemeToggle: Botón interactivo accesible para conmutar entre Modo Claro y Oscuro.
- * Trazabilidad: US-10 (Criterio 10.1), TASK-2.1.3
+ * src/components/common/layout/ThemeToggle.tsx
+ * [ISLA] Botón interactivo accesible para conmutar entre Modo Claro y Oscuro.
+ * Trazabilidad: US-10, TASK-7.7
  */
 export const ThemeToggle: React.FC = () => {
   const [theme, setTheme] = useState<Theme>('light');

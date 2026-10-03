@@ -9,19 +9,9 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 /**
- * Input: Campo de formulario accesible con etiquetas asociadas, indicador de error
- * y estilos de foco visibles (WCAG AA).
- * 
- * @example
- * ```tsx
- * <Input
- *   label="Nombre del Documento"
- *   placeholder="CV Desarrollador Frontend 2026"
- *   value={title}
- *   onChange={(e) => setTitle(e.target.value)}
- *   error={errorMsg}
- * />
- * ```
+ * src/components/common/primitives/Input.tsx
+ * [COMPONENTE] Campo de formulario accesible con etiquetas asociadas, indicador de error y estilos de foco visibles.
+ * Trazabilidad: TASK-7.3, TASK-7.7
  */
 export const Input: React.FC<InputProps> = ({
   label,

@@ -20,19 +20,10 @@ export interface ActionCardProps {
 }
 
 /**
- * ActionCard: Componente interactivo para disparar acciones o navegación rápida.
+ * src/components/common/primitives/ActionCard.tsx
+ * [COMPONENTE] Componente interactivo para disparar acciones o navegación rápida.
  * Diseñado con estética glassmorphic moderna, elevación al posar el cursor y alta legibilidad.
- * Reutilizado en la Landing (cuadrícula de valor) y en el Lobby (acciones rápidas ONLYOFFICE).
- * 
- * @example
- * ```tsx
- * <ActionCard
- *   title="Crear CV en Blanco"
- *   description="Comienza desde un lienzo limpio con secciones guiadas"
- *   icon={<Plus className="w-5 h-5" />}
- *   onClick={() => handleCreate()}
- * />
- * ```
+ * Trazabilidad: TASK-7.3, TASK-7.7
  */
 export const ActionCard: React.FC<ActionCardProps> = ({
   title,

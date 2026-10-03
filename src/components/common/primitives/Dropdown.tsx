@@ -1,4 +1,12 @@
+/**
+ * src/components/common/primitives/Dropdown.tsx
+ * [COMPONENTE] Menú contextual flotante accesible con soporte de cierre al clic exterior
+ * y navegación básica conforme a estándares WCAG AA.
+ * Trazabilidad: TASK-7.3, TASK-7.7
+ */
+
 import React, { useState, useRef, useEffect } from 'react';
+import { useClickOutside } from '../hooks/useClickOutside';
 
 export interface DropdownItem {
   id: string;
@@ -10,7 +18,7 @@ export interface DropdownItem {
 }
 
 export interface DropdownProps {
-  /** Elemento o función que renderiza el disparador del menú */
+  /** Elemento que renderiza el disparador del menú */
   trigger: React.ReactNode;
   /** Elementos a desplegar en la lista */
   items: DropdownItem[];
@@ -20,21 +28,6 @@ export interface DropdownProps {
   className?: string;
 }
 
-/**
- * Dropdown: Menú contextual flotante accesible con soporte de cierre al clic exterior
- * y navegación básica conforme a estándares WCAG AA.
- * 
- * @example
- * ```tsx
- * <Dropdown
- *   trigger={<button>Opciones</button>}
- *   items={[
- *     { id: 'rename', label: 'Renombrar', onClick: handleRename },
- *     { id: 'delete', label: 'Eliminar', danger: true, onClick: handleDelete }
- *   ]}
- * />
- * ```
- */
 export const Dropdown: React.FC<DropdownProps> = ({
   trigger,
   items,
@@ -44,12 +37,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useClickOutside(containerRef, () => setIsOpen(false), isOpen);
+
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
+    if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -57,12 +48,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleKeyDown);
-    }
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);

@@ -21,20 +21,9 @@ export interface ModalProps {
 }
 
 /**
- * Modal: Diálogo modal accesible con focus-trap, backdrop desenfocado y soporte
- * de tecla Escape conforme a las pautas WCAG AA.
- * 
- * @example
- * ```tsx
- * <Modal
- *   isOpen={isOpen}
- *   onClose={() => setIsOpen(false)}
- *   title="Confirmar eliminación"
- *   actions={<Button variant="danger" onClick={handleDelete}>Eliminar</Button>}
- * >
- *   <p>¿Estás seguro de que deseas eliminar este currículum?</p>
- * </Modal>
- * ```
+ * src/components/common/primitives/Modal.tsx
+ * [COMPONENTE] Diálogo modal accesible con focus-trap, backdrop desenfocado y soporte de tecla Escape (WCAG AA).
+ * Trazabilidad: TASK-7.3, TASK-7.7
  */
 export const Modal: React.FC<ModalProps> = ({
   isOpen,

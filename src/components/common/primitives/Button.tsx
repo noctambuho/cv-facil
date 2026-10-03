@@ -12,14 +12,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 /**
- * Button: Componente primitivo accesible para disparar acciones con soporte
- * de variantes de diseño, tamaños y estados de foco visibles (WCAG AA).
- * 
- * @example
- * ```tsx
- * <Button variant="primary" onClick={handleSave}>Guardar</Button>
- * <Button variant="danger" size="sm">Eliminar</Button>
- * ```
+ * src/components/common/primitives/Button.tsx
+ * [COMPONENTE] Botón interactivo accesible con soporte de variantes, tamaños e indicadores de carga.
+ * Trazabilidad: TASK-7.3, TASK-7.7
  */
 export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
