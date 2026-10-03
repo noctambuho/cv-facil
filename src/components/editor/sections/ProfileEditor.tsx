@@ -1,7 +1,14 @@
+/**
+ * src/components/editor/sections/ProfileEditor.tsx
+ * Formulario para datos personales, enlaces de contacto y resumen profesional.
+ * Trazabilidad: US-01, TASK-7.4
+ */
+
 import React from 'react';
 import type { Profile } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
 import { ProfilePhotoUpload } from './ProfilePhotoUpload';
+import { EditorField } from '../fields/EditorField';
 import { User, Mail, Phone, MapPin, Globe, FileText } from 'lucide-react';
 import { sanitizeExternalUrl } from '../../../domain/security';
 
@@ -11,9 +18,7 @@ export interface ProfileEditorProps {
 }
 
 /**
- * ProfileEditor: Formulario para datos personales, enlaces de contacto y resumen profesional.
- * La carga de foto se delega al componente ProfilePhotoUpload (SRP).
- * Trazabilidad: US-01, TASK-2.2.4, TASK-2.5.1
+ * [COMPONENTE] Sección de formulario para la información personal y de contacto.
  */
 export const ProfileEditor: React.FC<ProfileEditorProps> = ({ profile, onChange }) => {
   const handleChange = (field: keyof Profile, value: string) => {
@@ -23,144 +28,106 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ profile, onChange 
     });
   };
 
+  const handleUrlBlur = (field: 'linkedin' | 'github' | 'website') => {
+    const raw = profile[field] || '';
+    const clean = sanitizeExternalUrl(raw);
+    if (clean !== raw) {
+      handleChange(field, clean);
+    }
+  };
+
   return (
     <SectionCard title="Datos Personales y Contacto" icon={<User className="w-4 h-4" />}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-        {/* Nombre completo */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            Nombre Completo *
-          </label>
-          <input
-            type="text"
-            value={profile.fullName}
-            onChange={(e) => handleChange('fullName', e.target.value)}
-            placeholder="Ej: Alejandro Morales"
-            className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 transition"
-          />
-        </div>
+        <EditorField
+          label="Nombre Completo"
+          required
+          value={profile.fullName}
+          onChange={(val) => handleChange('fullName', val)}
+          placeholder="Ej: Alejandro Morales"
+        />
 
-        {/* Titular profesional */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            Cargo / Titular Profesional *
-          </label>
-          <input
-            type="text"
-            value={profile.headline}
-            onChange={(e) => handleChange('headline', e.target.value)}
-            placeholder="Ej: Senior Full Stack Engineer"
-            className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 transition"
-          />
-        </div>
+        <EditorField
+          label="Cargo / Titular Profesional"
+          required
+          value={profile.headline}
+          onChange={(val) => handleChange('headline', val)}
+          placeholder="Ej: Senior Full Stack Engineer"
+        />
 
-        {/* Correo electrónico */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            <Mail className="w-3 h-3 inline mr-1 text-slate-400" /> Correo Electrónico
-          </label>
-          <input
-            type="email"
-            value={profile.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-            placeholder="nombre@mail.com"
-            className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 transition"
-          />
-        </div>
+        <EditorField
+          label="Correo Electrónico"
+          icon={<Mail className="w-3 h-3" />}
+          type="email"
+          value={profile.email}
+          onChange={(val) => handleChange('email', val)}
+          placeholder="alejandro@ejemplo.com"
+        />
 
-        {/* Teléfono */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            <Phone className="w-3 h-3 inline mr-1 text-slate-400" /> Teléfono
-          </label>
-          <input
-            type="tel"
-            value={profile.phone}
-            onChange={(e) => handleChange('phone', e.target.value)}
-            placeholder="+56 9 1234 5678"
-            className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 transition"
-          />
-        </div>
+        <EditorField
+          label="Teléfono"
+          icon={<Phone className="w-3 h-3" />}
+          type="tel"
+          value={profile.phone}
+          onChange={(val) => handleChange('phone', val)}
+          placeholder="+34 600 000 000"
+        />
 
-        {/* Ubicación */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            <MapPin className="w-3 h-3 inline mr-1 text-slate-400" /> Ubicación
-          </label>
-          <input
-            type="text"
-            value={profile.location}
-            onChange={(e) => handleChange('location', e.target.value)}
-            placeholder="Santiago, Chile"
-            className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 transition"
-          />
-        </div>
+        <EditorField
+          label="Ubicación"
+          icon={<MapPin className="w-3 h-3" />}
+          value={profile.location}
+          onChange={(val) => handleChange('location', val)}
+          placeholder="Madrid, España / Remoto"
+        />
 
-        {/* LinkedIn */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            LinkedIn
-          </label>
-          <input
-            type="url"
-            value={profile.linkedin}
-            onChange={(e) => handleChange('linkedin', sanitizeExternalUrl(e.target.value))}
-            placeholder="https://linkedin.com/in/tuusuario"
-            className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 transition"
-          />
-        </div>
+        <EditorField
+          label="LinkedIn"
+          type="url"
+          value={profile.linkedin}
+          onChange={(val) => handleChange('linkedin', val)}
+          onBlur={() => handleUrlBlur('linkedin')}
+          placeholder="https://linkedin.com/in/tuusuario"
+        />
 
-        {/* GitHub */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            GitHub
-          </label>
-          <input
-            type="url"
-            value={profile.github}
-            onChange={(e) => handleChange('github', sanitizeExternalUrl(e.target.value))}
-            placeholder="https://github.com/tuusuario"
-            className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 transition"
-          />
-        </div>
+        <EditorField
+          label="GitHub"
+          type="url"
+          value={profile.github}
+          onChange={(val) => handleChange('github', val)}
+          onBlur={() => handleUrlBlur('github')}
+          placeholder="https://github.com/tuusuario"
+        />
 
-        {/* Sitio Web */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            <Globe className="w-3 h-3 inline mr-1 text-slate-400" /> Sitio Web / Portfolio
-          </label>
-          <input
-            type="url"
-            value={profile.website}
-            onChange={(e) => handleChange('website', sanitizeExternalUrl(e.target.value))}
-            placeholder="https://tu-portfolio.dev"
-            className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 transition"
-          />
-        </div>
+        <EditorField
+          label="Sitio Web / Portfolio"
+          icon={<Globe className="w-3 h-3" />}
+          type="url"
+          value={profile.website}
+          onChange={(val) => handleChange('website', val)}
+          onBlur={() => handleUrlBlur('website')}
+          placeholder="https://tu-portfolio.dev"
+        />
+      </div>
 
-        {/* Foto de Perfil (Subcomponente modular) */}
+      <div className="mt-4 pt-4 border-t border-slate-200/80 dark:border-slate-800">
         <ProfilePhotoUpload
           avatarUrl={profile.avatarUrl || ''}
           onChange={(newUrl) => handleChange('avatarUrl', newUrl)}
         />
       </div>
 
-      {/* Resumen profesional */}
-      <div className="mt-4">
-        <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-          <FileText className="w-3 h-3 inline mr-1 text-slate-400" /> Resumen Profesional
-        </label>
-        <textarea
-          value={profile.summary}
-          onChange={(e) => handleChange('summary', e.target.value)}
-          placeholder="Breve resumen profesional que destaque tu propuesta de valor (2-3 oraciones)..."
+      <div className="mt-4 pt-4 border-t border-slate-200/80 dark:border-slate-800">
+        <EditorField
+          as="textarea"
+          label="Resumen Profesional"
+          icon={<FileText className="w-3 h-3" />}
           rows={4}
-          maxLength={600}
-          className="w-full text-xs px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 resize-none transition"
+          value={profile.summary}
+          onChange={(val) => handleChange('summary', val.slice(0, 600))}
+          placeholder="Breve extracto de tu trayectoria, especialidad técnica e impacto..."
+          helperText={`${profile.summary?.length || 0} / 600 caracteres recomendados`}
         />
-        <div className="text-right text-[10px] text-slate-400 mt-0.5">
-          {profile.summary.length}/600 caracteres
-        </div>
       </div>
     </SectionCard>
   );

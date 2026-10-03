@@ -1,158 +1,122 @@
+/**
+ * src/components/editor/sections/EducationEditor.tsx
+ * Formulario interactivo para gestionar la formación académica y certificaciones.
+ * Trazabilidad: US-03, TASK-7.4
+ */
+
 import React from 'react';
 import type { EducationItem } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
-import { GraduationCap, Plus, Trash2, Calendar, BookOpen } from 'lucide-react';
+import { EditorField } from '../fields/EditorField';
+import { ItemCard } from '../fields/ItemCard';
+import { AddItemButton } from '../fields/AddItemButton';
+import { appendItem, removeById, updateFieldById } from '../../../domain/listOps';
+import { generateSecureId } from '../../../domain/security';
+import { GraduationCap, Landmark, Calendar } from 'lucide-react';
 
-interface EducationEditorProps {
+export interface EducationEditorProps {
   education: EducationItem[];
   onChange: (updated: EducationItem[]) => void;
 }
 
+/**
+ * [COMPONENTE] Sección para agregar, editar y eliminar titulaciones académicas.
+ */
 export const EducationEditor: React.FC<EducationEditorProps> = ({ education, onChange }) => {
   const handleAdd = () => {
     const newItem: EducationItem = {
-      id: 'edu-' + Date.now(),
+      id: generateSecureId('edu'),
       institution: '',
       degree: '',
       fieldOfStudy: '',
       startDate: '',
       endDate: '',
-      description: ''
+      description: '',
     };
-    onChange([...education, newItem]);
+    onChange(appendItem(education, newItem));
   };
 
   const handleRemove = (id: string) => {
-    onChange(education.filter((item) => item.id !== id));
+    onChange(removeById(education, id));
   };
 
-  const handleUpdate = (id: string, field: keyof EducationItem, value: string) => {
-    onChange(
-      education.map((item) => {
-        if (item.id === id) {
-          return { ...item, [field]: value };
-        }
-        return item;
-      })
-    );
+  const handleUpdate = <K extends keyof EducationItem>(
+    id: string,
+    field: K,
+    value: EducationItem[K]
+  ) => {
+    onChange(updateFieldById(education, id, field, value));
   };
 
   return (
     <SectionCard
-      title="Educación y Formación"
+      title="Formación Académica"
       icon={<GraduationCap className="w-4 h-4" />}
       badge={education.length}
     >
       <div className="space-y-4">
         {education.map((edu, index) => (
-          <div
+          <ItemCard
             key={edu.id}
-            className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/80 space-y-3 relative group"
+            title={`Titulación #${index + 1}: ${edu.degree || edu.institution || 'Sin título'}`}
+            onRemove={() => handleRemove(edu.id)}
+            removeTitle="Eliminar titulación"
           >
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-bold text-slate-700">
-                Titulación #{index + 1}: {edu.degree || edu.institution || 'Sin título'}
-              </span>
-              <button
-                type="button"
-                onClick={() => handleRemove(edu.id)}
-                title="Eliminar titulación"
-                className="text-slate-400 hover:text-red-600 p-1 rounded-md transition"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1 flex items-center gap-1">
-                  <BookOpen className="w-3 h-3 text-slate-400" /> Institución Educativa / Universidad *
-                </label>
-                <input
-                  type="text"
-                  value={edu.institution}
-                  onChange={(e) => handleUpdate(edu.id, 'institution', e.target.value)}
-                  placeholder="Ej: Universidad Politécnica"
-                  className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                />
-              </div>
+              <EditorField
+                label="Institución / Universidad"
+                required
+                icon={<Landmark className="w-3 h-3" />}
+                value={edu.institution}
+                onChange={(val) => handleUpdate(edu.id, 'institution', val)}
+                placeholder="Ej: Universidad Politécnica"
+              />
 
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  Título / Grado Obtenido *
-                </label>
-                <input
-                  type="text"
-                  value={edu.degree}
-                  onChange={(e) => handleUpdate(edu.id, 'degree', e.target.value)}
-                  placeholder="Ej: Grado en Ingeniería Informática"
-                  className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                />
-              </div>
+              <EditorField
+                label="Título / Grado Obtenido"
+                required
+                value={edu.degree}
+                onChange={(val) => handleUpdate(edu.id, 'degree', val)}
+                placeholder="Ej: Grado en Ingeniería Informática"
+              />
 
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  Campo de Estudio / Especialidad
-                </label>
-                <input
-                  type="text"
-                  value={edu.fieldOfStudy}
-                  onChange={(e) => handleUpdate(edu.id, 'fieldOfStudy', e.target.value)}
-                  placeholder="Ej: Software y Sistemas Distribuidos"
-                  className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                />
-              </div>
+              <EditorField
+                label="Campo de Estudio / Especialidad"
+                value={edu.fieldOfStudy}
+                onChange={(val) => handleUpdate(edu.id, 'fieldOfStudy', val)}
+                placeholder="Ej: Desarrollo de Software"
+              />
 
               <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-600 mb-1 flex items-center gap-1">
-                    <Calendar className="w-3 h-3 text-slate-400" /> Año Inicio
-                  </label>
-                  <input
-                    type="text"
-                    value={edu.startDate}
-                    onChange={(e) => handleUpdate(edu.id, 'startDate', e.target.value)}
-                    placeholder="2016"
-                    className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                  />
-                </div>
+                <EditorField
+                  label="Inicio"
+                  icon={<Calendar className="w-3 h-3" />}
+                  value={edu.startDate}
+                  onChange={(val) => handleUpdate(edu.id, 'startDate', val)}
+                  placeholder="2018-09"
+                />
 
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">Año Fin</label>
-                  <input
-                    type="text"
-                    value={edu.endDate}
-                    onChange={(e) => handleUpdate(edu.id, 'endDate', e.target.value)}
-                    placeholder="2020"
-                    className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                  />
-                </div>
+                <EditorField
+                  label="Fin"
+                  value={edu.endDate}
+                  onChange={(val) => handleUpdate(edu.id, 'endDate', val)}
+                  placeholder="2022-06"
+                />
               </div>
             </div>
 
-            <div>
-              <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                Detalles Adicionales / Menciones (Opcional)
-              </label>
-              <input
-                type="text"
-                value={edu.description || ''}
-                onChange={(e) => handleUpdate(edu.id, 'description', e.target.value)}
-                placeholder="Ej: Graduado con honores o promedio destacado"
-                className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-              />
-            </div>
-          </div>
+            <EditorField
+              as="textarea"
+              label="Detalles Adicionales (Opcional)"
+              rows={2}
+              value={edu.description || ''}
+              onChange={(val) => handleUpdate(edu.id, 'description', val)}
+              placeholder="Mención de honor, proyectos destacados o tesis..."
+            />
+          </ItemCard>
         ))}
 
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="w-full py-2.5 px-4 border border-dashed border-blue-400 bg-blue-50/50 hover:bg-blue-50 text-blue-700 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Añadir Titulación / Formación</span>
-        </button>
+        <AddItemButton label="Añadir Formación Académica" onClick={handleAdd} />
       </div>
     </SectionCard>
   );

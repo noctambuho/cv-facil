@@ -1,24 +1,25 @@
-import React, { useState, useMemo } from 'react';
+/**
+ * src/components/editor/ExportModal.tsx
+ * Diálogo modal para la exportación de CV en PDF vectorial, respaldo JSON y Google Drive.
+ * Trazabilidad: US-09, TASK-7.4
+ */
+
+import React from 'react';
 import { Modal } from '../common/primitives/Modal';
 import { Button } from '../common/primitives/Button';
 import type { CVData } from '../../types/cv';
-import {
-  EXPORT_PROFILES,
-  type ExportQualityProfile,
-  estimatePdfSizeBytes,
-  formatBytes,
-} from '../../domain/exportEstimate';
-import { generatePdfBlob, downloadPdfFile } from '../../services/pdf/pdfRenderer';
-import { exportToJSON } from '../../services/browser/download';
-import { getStorageAdapter, GoogleDriveAdapter } from '../../services/storage';
+import { EXPORT_PROFILES, type ExportQualityProfile } from '../../domain/exportEstimate';
 import { GoogleDriveConfigModal } from '../lobby/GoogleDriveConfigModal';
+import { googleDriveAdapter } from '../../services/storage';
+import { useExportWorkflow } from './hooks/useExportWorkflow';
 import {
   HardDrive,
   FileCheck2,
   FileJson,
   CheckCircle2,
   AlertCircle,
-  Download,
+  Sparkles,
+  Info,
 } from 'lucide-react';
 
 export interface ExportModalProps {
@@ -30,248 +31,170 @@ export interface ExportModalProps {
 }
 
 /**
- * ExportModal: Diálogo compacto y centralizado para la descarga y exportación de CV en PDF.
- * Genera PDFs vectoriales puros y nítidos utilizando @react-pdf/renderer tanto para descarga local
- * como para sincronización directa en Google Drive (BYOS).
+ * [COMPONENTE] Diálogo de selección de calidad y destino de exportación.
  */
 export const ExportModal: React.FC<ExportModalProps> = ({
   isOpen,
   onClose,
   data,
-  documentId = 'cv-actual',
-  documentTitle = 'Mi_Curriculum',
+  documentId,
+  documentTitle,
 }) => {
-  const [selectedProfile, setSelectedProfile] = useState<ExportQualityProfile>('ats-web');
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
-  const [isSavingToDrive, setIsSavingToDrive] = useState<boolean>(false);
-  const [isDriveConfigModalOpen, setIsDriveConfigModalOpen] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [driveSuccessMessage, setDriveSuccessMessage] = useState<string | null>(null);
-
-  // Cálculo de peso estimado
-  const estimatedBytes = useMemo(() => {
-    return estimatePdfSizeBytes(data, selectedProfile);
-  }, [data, selectedProfile]);
-
-  const estimatedString = formatBytes(estimatedBytes);
-  const isUnder2MB = estimatedBytes < 2 * 1024 * 1024;
-  const filename = (documentTitle || data.profile.fullName || 'Curriculum_Vitae').trim();
-
-  // Acción Principal: Descargar PDF Vectorial (@react-pdf/renderer)
-  const handleDownloadVectorPDF = async () => {
-    setIsGeneratingPdf(true);
-    setErrorMessage(null);
-    try {
-      await downloadPdfFile(data, filename);
-      onClose();
-    } catch (err: any) {
-      console.error('Error generando PDF vectorial:', err);
-      setErrorMessage(
-        err?.message || 'No se pudo compilar el PDF vectorial. Revisa la consola para más detalles.'
-      );
-    } finally {
-      setIsGeneratingPdf(false);
-    }
-  };
-
-  // Acción 2: Exportar Respaldo JSON
-  const handleExportJSON = () => {
-    exportToJSON(data);
-  };
-
-  // Acción 3: Guardar en Google Drive (BYOS)
-  const handleSaveToDrive = async () => {
-    setIsSavingToDrive(true);
-    setDriveSuccessMessage(null);
-    setErrorMessage(null);
-
-    try {
-      const driveAdapter = new GoogleDriveAdapter();
-      const auth = driveAdapter.getAuthState();
-
-      if (!auth.isAuthenticated) {
-        if (!driveAdapter.getClientId()) {
-          setIsDriveConfigModalOpen(true);
-          setIsSavingToDrive(false);
-          return;
-        }
-        await driveAdapter.authenticate();
-      }
-
-      await driveAdapter.saveDocument(data, filename, documentId);
-      const pdfBlob = await generatePdfBlob(data);
-      await driveAdapter.savePDF(documentId, pdfBlob, `${filename}.pdf`);
-
-      const localAdapter = getStorageAdapter('local');
-      try {
-        await localAdapter.savePDF(documentId, pdfBlob, `${filename}.pdf`);
-      } catch {
-        // Ignorar si solo vive en Drive
-      }
-
-      setDriveSuccessMessage('¡CV y PDF vectorial guardados en tu Google Drive (Carpeta: CV Data)!');
-    } catch (err: any) {
-      if (err?.message === 'MISSING_CLIENT_ID') {
-        setIsDriveConfigModalOpen(true);
-      } else {
-        setErrorMessage('Error al sincronizar con Google Drive: ' + (err.message || 'Error desconocido'));
-      }
-    } finally {
-      setIsSavingToDrive(false);
-    }
-  };
-
-  const handleDriveConfigConnect = async (clientId: string) => {
-    const driveAdapter = new GoogleDriveAdapter();
-    await driveAdapter.authenticate(clientId);
-    await handleSaveToDrive();
-  };
+  const {
+    selectedProfile,
+    setSelectedProfile,
+    isGeneratingPdf,
+    isSavingToDrive,
+    isDriveConfigModalOpen,
+    setIsDriveConfigModalOpen,
+    errorMessage,
+    driveSuccessMessage,
+    estimatedString,
+    isUnder2MB,
+    handleDownloadVectorPDF,
+    handleExportJSON,
+    handleSaveToDrive,
+    handleDriveConfigConnect,
+  } = useExportWorkflow({ data, documentId, documentTitle, onClose });
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Exportar Currículum"
-      description="Descarga tu CV en PDF vectorial o respalda tus datos."
-      maxWidth="max-w-[max-content]"
-      actions={
-        <div className="flex items-center justify-center gap-2 w-full pt-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleExportJSON}
-            leftIcon={<FileJson className="w-3.5 h-3.5" />}
-          >
-            Respaldo JSON
-          </Button>
+    <>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title="Exportar y Descargar Currículum"
+        description="Elige el perfil de exportación y el destino para tu CV profesional."
+        maxWidth="max-w-xl"
+        actions={
+          <>
+            <Button variant="ghost" onClick={onClose}>
+              Cerrar
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleExportJSON}
+              leftIcon={<FileJson className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />}
+            >
+              Exportar JSON
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleDownloadVectorPDF}
+              isLoading={isGeneratingPdf}
+              leftIcon={<FileCheck2 className="w-4 h-4" />}
+            >
+              Descargar PDF
+            </Button>
+          </>
+        }
+      >
+        <div className="space-y-5">
+          {/* Alertas de error o éxito */}
+          {errorMessage && (
+            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-900 text-xs">
+              <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+              <p>{errorMessage}</p>
+            </div>
+          )}
 
-          <Button variant="outline" size="sm" onClick={onClose}>
-            Cancelar
-          </Button>
+          {driveSuccessMessage && (
+            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-900 text-xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <p>{driveSuccessMessage}</p>
+            </div>
+          )}
 
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleDownloadVectorPDF}
-            isLoading={isGeneratingPdf}
-            leftIcon={<Download className="w-4 h-4" />}
-          >
-            Descargar PDF
-          </Button>
-        </div>
-      }
-    >
-      <div className="w-[320px] sm:w-[380px] mx-auto space-y-3.5 text-center sm:text-left">
-        {/* Selector Compacto de Perfil */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
-            <span>Calidad de exportación:</span>
-            <span className="text-[10px] text-slate-400 font-normal">Motor @react-pdf/renderer</span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            {Object.values(EXPORT_PROFILES).map((profile) => {
-              const isSelected = selectedProfile === profile.id;
-              return (
-                <button
-                  type="button"
-                  key={profile.id}
-                  onClick={() => setSelectedProfile(profile.id)}
-                  className={`p-2.5 rounded-xl border text-left transition select-none flex flex-col justify-between ${
-                    isSelected
-                      ? 'border-blue-600 bg-blue-50/80 dark:bg-blue-950/40 text-blue-950 dark:text-blue-100 shadow-2xs'
-                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <span className="font-bold text-[11px] leading-tight">
-                      {profile.id === 'ats-web' ? 'Optimizado ATS' : 'Calidad Vectorial'}
+          {/* Selector de perfil de calidad */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              Perfil de Optimización ATS
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {(Object.keys(EXPORT_PROFILES) as ExportQualityProfile[]).map((profKey) => {
+                const prof = EXPORT_PROFILES[profKey];
+                const isSelected = selectedProfile === profKey;
+                return (
+                  <button
+                    key={profKey}
+                    type="button"
+                    onClick={() => setSelectedProfile(profKey)}
+                    className={`text-left p-3 rounded-xl border transition flex flex-col justify-between ${
+                      isSelected
+                        ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/30 ring-1 ring-blue-600'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">
+                          {prof.title}
+                        </span>
+                        {isSelected && <CheckCircle2 className="w-4 h-4 text-blue-600" />}
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+                        {prof.description}
+                      </p>
+                    </div>
+                    <span className="mt-2 text-[10px] font-semibold text-blue-700 dark:text-blue-300 bg-blue-100/60 dark:bg-blue-900/40 px-2 py-0.5 rounded-full self-start">
+                      {prof.badge}
                     </span>
-                    <span className="text-[9px] px-1 py-0.5 rounded bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 font-bold shrink-0">
-                      &lt;{profile.targetMaxMB}MB
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-tight">
-                    {profile.description}
-                  </p>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Indicador de Peso Estimado y Estado ATS */}
-        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <FileCheck2 className={`w-4 h-4 shrink-0 ${isUnder2MB ? 'text-emerald-600' : 'text-amber-500'}`} />
-            <div className="text-left">
-              <span className="font-bold text-slate-800 dark:text-slate-200 text-[11px]">
-                Peso estimado: {estimatedString}
+          {/* Indicador de peso estimado */}
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <Info className="w-4 h-4 text-slate-400" />
+              <div>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">
+                  Peso estimado del PDF:{' '}
+                </span>
+                <span className="font-bold text-slate-900 dark:text-white">{estimatedString}</span>
+              </div>
+            </div>
+            {isUnder2MB && (
+              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-full">
+                Cumple límite &lt; 2MB
               </span>
-              <span className="block text-[9.5px] text-slate-500 dark:text-slate-400 leading-none mt-0.5">
-                {isUnder2MB ? 'Apto para portales ATS de empleo' : 'Resolución completa para imprenta'}
-              </span>
-            </div>
+            )}
           </div>
-          <span
-            className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
-              isUnder2MB
-                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-            }`}
-          >
-            {isUnder2MB ? 'Óptimo' : 'Alta Res.'}
-          </span>
+
+          {/* Opción de respaldo en Google Drive */}
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <HardDrive className="w-4 h-4 text-blue-600" />
+              <div>
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
+                  Guardar en Google Drive
+                </span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block">
+                  Sincroniza el JSON y el PDF en tu carpeta privada "CV Data"
+                </span>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSaveToDrive}
+              isLoading={isSavingToDrive}
+              leftIcon={<Sparkles className="w-3.5 h-3.5 text-blue-500" />}
+            >
+              Guardar en Drive
+            </Button>
+          </div>
         </div>
+      </Modal>
 
-        {/* Doble Destino: Guardar en Google Drive (BYOS) */}
-        <div className="p-2.5 rounded-xl border border-indigo-100 dark:border-indigo-900/60 bg-gradient-to-r from-indigo-50/50 to-blue-50/40 dark:from-indigo-950/20 dark:to-blue-950/20 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 text-left">
-            <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0">
-              <HardDrive className="w-3.5 h-3.5" />
-            </div>
-            <div>
-              <h4 className="font-bold text-[11px] text-slate-900 dark:text-white leading-tight">
-                Sincronizar con Google Drive
-              </h4>
-              <p className="text-[9.5px] text-slate-500 dark:text-slate-400 leading-tight">
-                Guarda JSON y PDF vectorial en la carpeta "CV Data"
-              </p>
-            </div>
-          </div>
-
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={handleSaveToDrive}
-            isLoading={isSavingToDrive}
-            className="text-[11px] px-2.5 py-1 shrink-0"
-          >
-            Drive
-          </Button>
-        </div>
-
-        {driveSuccessMessage && (
-          <div className="flex items-center gap-1.5 p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 text-[11px]">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span>{driveSuccessMessage}</span>
-          </div>
-        )}
-
-        {errorMessage && (
-          <div className="flex items-center gap-1.5 p-2 rounded-lg bg-red-50 dark:bg-red-950/50 text-red-800 dark:text-red-200 text-[11px] text-left">
-            <AlertCircle className="w-3.5 h-3.5 text-red-600 shrink-0" />
-            <span>{errorMessage}</span>
-          </div>
-        )}
-      </div>
-
+      {/* Modal de configuración BYOS de Google Drive si falta Client ID */}
       <GoogleDriveConfigModal
         isOpen={isDriveConfigModalOpen}
         onClose={() => setIsDriveConfigModalOpen(false)}
         onConnect={handleDriveConfigConnect}
-        initialClientId={new GoogleDriveAdapter().getClientId()}
+        initialClientId={googleDriveAdapter.getClientId()}
       />
-    </Modal>
+    </>
   );
 };

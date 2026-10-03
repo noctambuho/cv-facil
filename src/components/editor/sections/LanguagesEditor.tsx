@@ -1,93 +1,99 @@
+/**
+ * src/components/editor/sections/LanguagesEditor.tsx
+ * Formulario para añadir y eliminar idiomas dominados con sus niveles de certificación.
+ * Trazabilidad: US-05, TASK-7.4
+ */
+
 import React, { useState } from 'react';
 import type { LanguageItem } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
-import { Languages, Plus, Trash2 } from 'lucide-react';
+import { appendItem, removeById } from '../../../domain/listOps';
+import { generateSecureId } from '../../../domain/security';
+import { Languages, Plus, X } from 'lucide-react';
 
-interface LanguagesEditorProps {
+export interface LanguagesEditorProps {
   languages: LanguageItem[];
   onChange: (updated: LanguageItem[]) => void;
 }
 
+const COMMON_LEVELS = ['Nativo', 'C2 Bilingüe', 'C1 Avanzado', 'B2 Intermedio Alto', 'B1 Intermedio', 'A2 Básico'];
+
+/**
+ * [COMPONENTE] Sección para administrar idiomas y fluidez lingüística.
+ */
 export const LanguagesEditor: React.FC<LanguagesEditorProps> = ({ languages, onChange }) => {
   const [name, setName] = useState('');
-  const [level, setLevel] = useState('B2 Intermedio');
+  const [level, setLevel] = useState('C1 Avanzado');
 
-  const handleAdd = (e?: React.SyntheticEvent) => {
-    if (e) e.preventDefault();
+  const handleAdd = () => {
     if (!name.trim()) return;
-
     const newItem: LanguageItem = {
-      id: 'lang-' + Date.now(),
+      id: generateSecureId('lang'),
       name: name.trim(),
-      level
+      level,
     };
-
-    onChange([...languages, newItem]);
+    onChange(appendItem(languages, newItem));
     setName('');
   };
 
   const handleRemove = (id: string) => {
-    onChange(languages.filter((l) => l.id !== id));
+    onChange(removeById(languages, id));
   };
 
   return (
     <SectionCard title="Idiomas" icon={<Languages className="w-4 h-4" />} badge={languages.length}>
-      <form onSubmit={handleAdd} className="flex flex-col sm:flex-row gap-2 pb-3 border-b border-slate-100">
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Ej: Español, Inglés, Francés..."
-          className="flex-1 text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-        />
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row gap-2">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAdd())}
+            placeholder="Ej: Inglés, Alemán, Portugués..."
+            className="flex-1 text-xs px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 transition"
+          />
 
-        <select
-          value={level}
-          onChange={(e) => setLevel(e.target.value)}
-          className="text-xs px-3 py-2 border border-slate-200 rounded-lg bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-        >
-          <option value="Nativo">Nativo / Bilingüe</option>
-          <option value="C2 Avanzado / Maestría">C2 Maestría</option>
-          <option value="C1 Profesional Completo">C1 Avanzado</option>
-          <option value="B2 Intermedio Alto">B2 Intermedio Alto</option>
-          <option value="B1 Intermedio">B1 Intermedio</option>
-          <option value="A2 / A1 Básico">A2/A1 Elemental</option>
-        </select>
-
-        <button
-          type="submit"
-          className="px-3.5 py-2 bg-blue-700 hover:bg-blue-800 text-white text-xs font-semibold rounded-lg flex items-center justify-center gap-1 transition shadow-xs"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          <span>Añadir</span>
-        </button>
-      </form>
-
-      <div className="space-y-2 pt-2">
-        {languages.map((lang) => (
-          <div
-            key={lang.id}
-            className="flex items-center justify-between p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+          <select
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            className="text-xs px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 transition"
           >
-            <span className="font-semibold text-slate-800">{lang.name}</span>
-            <div className="flex items-center gap-2">
-              <span className="text-slate-500 text-[11px] bg-white px-2 py-0.5 rounded border border-slate-200">
-                {lang.level}
-              </span>
+            {COMMON_LEVELS.map((lvl) => (
+              <option key={lvl} value={lvl}>
+                {lvl}
+              </option>
+            ))}
+          </select>
+
+          <button
+            type="button"
+            onClick={handleAdd}
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg flex items-center justify-center gap-1 transition"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Añadir</span>
+          </button>
+        </div>
+
+        <div className="flex flex-wrap gap-1.5">
+          {languages.map((lang) => (
+            <div
+              key={lang.id}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
+            >
+              <span className="font-semibold">{lang.name}:</span>
+              <span className="text-slate-600 dark:text-slate-400">{lang.level}</span>
               <button
                 type="button"
                 onClick={() => handleRemove(lang.id)}
                 title="Eliminar idioma"
-                className="text-slate-400 hover:text-red-600 p-0.5 transition"
+                className="text-slate-400 hover:text-red-500 transition ml-0.5"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <X className="w-3 h-3" />
               </button>
             </div>
-          </div>
-        ))}
-        {languages.length === 0 && (
-          <p className="text-xs text-slate-400 italic py-1">No hay idiomas añadidos aún.</p>
-        )}
+          ))}
+        </div>
       </div>
     </SectionCard>
   );

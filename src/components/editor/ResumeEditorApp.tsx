@@ -166,7 +166,6 @@ export const ResumeEditorApp: React.FC = () => {
       <FloatingStyleDock
         settings={data.settings}
         onChange={updateSettings}
-        hasProfilePhoto={Boolean(data.profile.avatarUrl)}
       />
 
       {/* Diálogo Inteligente de Exportación (US-09, TASK-2.5.2) */}

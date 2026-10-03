@@ -1,41 +1,52 @@
+/**
+ * src/components/editor/sections/ExperienceEditor.tsx
+ * Formulario interactivo para gestionar la trayectoria laboral del candidato.
+ * Trazabilidad: US-02, TASK-7.4
+ */
+
 import React from 'react';
 import type { ExperienceItem } from '../../../types/cv';
 import { SectionCard } from './SectionCard';
-import { Briefcase, Plus, Trash2, Calendar, MapPin, Building } from 'lucide-react';
+import { EditorField } from '../fields/EditorField';
+import { ItemCard } from '../fields/ItemCard';
+import { AddItemButton } from '../fields/AddItemButton';
+import { prependItem, removeById, updateFieldById } from '../../../domain/listOps';
+import { generateSecureId } from '../../../domain/security';
+import { Briefcase, Building, MapPin, Calendar } from 'lucide-react';
 
-interface ExperienceEditorProps {
+export interface ExperienceEditorProps {
   experiences: ExperienceItem[];
   onChange: (updated: ExperienceItem[]) => void;
 }
 
+/**
+ * [COMPONENTE] Sección para agregar, editar y eliminar puestos de trabajo.
+ */
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ experiences, onChange }) => {
   const handleAdd = () => {
     const newItem: ExperienceItem = {
-      id: 'exp-' + Date.now(),
+      id: generateSecureId('exp'),
       company: '',
       role: '',
       location: '',
       startDate: '',
       endDate: '',
       current: false,
-      description: ''
+      description: '',
     };
-    onChange([newItem, ...experiences]);
+    onChange(prependItem(experiences, newItem));
   };
 
   const handleRemove = (id: string) => {
-    onChange(experiences.filter((item) => item.id !== id));
+    onChange(removeById(experiences, id));
   };
 
-  const handleUpdate = (id: string, field: keyof ExperienceItem, value: any) => {
-    onChange(
-      experiences.map((item) => {
-        if (item.id === id) {
-          return { ...item, [field]: value };
-        }
-        return item;
-      })
-    );
+  const handleUpdate = <K extends keyof ExperienceItem>(
+    id: string,
+    field: K,
+    value: ExperienceItem[K]
+  ) => {
+    onChange(updateFieldById(experiences, id, field, value));
   };
 
   return (
@@ -46,130 +57,85 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ experiences,
     >
       <div className="space-y-4">
         {experiences.map((exp, index) => (
-          <div
+          <ItemCard
             key={exp.id}
-            className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/80 space-y-3 relative group"
+            title={`Puesto #${experiences.length - index}: ${exp.role || exp.company || 'Sin título'}`}
+            onRemove={() => handleRemove(exp.id)}
+            removeTitle="Eliminar experiencia"
           >
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-bold text-slate-700">
-                Puesto #{experiences.length - index}: {exp.role || exp.company || 'Sin título'}
-              </span>
-              <button
-                type="button"
-                onClick={() => handleRemove(exp.id)}
-                title="Eliminar experiencia"
-                className="text-slate-400 hover:text-red-600 p-1 rounded-md transition"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1 flex items-center gap-1">
-                  <Building className="w-3 h-3 text-slate-400" /> Empresa / Organización *
-                </label>
-                <input
-                  type="text"
-                  value={exp.company}
-                  onChange={(e) => handleUpdate(exp.id, 'company', e.target.value)}
-                  placeholder="Ej: TechFlow Solutions"
-                  className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                />
-              </div>
+              <EditorField
+                label="Empresa / Organización"
+                required
+                icon={<Building className="w-3 h-3" />}
+                value={exp.company}
+                onChange={(val) => handleUpdate(exp.id, 'company', val)}
+                placeholder="Ej: TechFlow Solutions"
+              />
 
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  Cargo / Puesto *
-                </label>
-                <input
-                  type="text"
-                  value={exp.role}
-                  onChange={(e) => handleUpdate(exp.id, 'role', e.target.value)}
-                  placeholder="Ej: Senior Software Engineer"
-                  className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                />
-              </div>
+              <EditorField
+                label="Cargo / Puesto"
+                required
+                value={exp.role}
+                onChange={(val) => handleUpdate(exp.id, 'role', val)}
+                placeholder="Ej: Senior Software Engineer"
+              />
 
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1 flex items-center gap-1">
-                  <MapPin className="w-3 h-3 text-slate-400" /> Ubicación
-                </label>
-                <input
-                  type="text"
-                  value={exp.location}
-                  onChange={(e) => handleUpdate(exp.id, 'location', e.target.value)}
-                  placeholder="Ej: Madrid / Remoto"
-                  className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                />
-              </div>
+              <EditorField
+                label="Ubicación"
+                icon={<MapPin className="w-3 h-3" />}
+                value={exp.location}
+                onChange={(val) => handleUpdate(exp.id, 'location', val)}
+                placeholder="Ej: Madrid / Remoto"
+              />
 
               <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-600 mb-1 flex items-center gap-1">
-                    <Calendar className="w-3 h-3 text-slate-400" /> Inicio
-                  </label>
-                  <input
-                    type="text"
-                    value={exp.startDate}
-                    onChange={(e) => handleUpdate(exp.id, 'startDate', e.target.value)}
-                    placeholder="2022-03"
-                    className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                  />
-                </div>
+                <EditorField
+                  label="Inicio"
+                  icon={<Calendar className="w-3 h-3" />}
+                  value={exp.startDate}
+                  onChange={(val) => handleUpdate(exp.id, 'startDate', val)}
+                  placeholder="2022-03"
+                />
 
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">Fin</label>
-                  <input
-                    type="text"
-                    disabled={exp.current}
-                    value={exp.current ? 'Presente' : exp.endDate}
-                    onChange={(e) => handleUpdate(exp.id, 'endDate', e.target.value)}
-                    placeholder="2024-01"
-                    className={`w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition ${
-                      exp.current ? 'opacity-50 cursor-not-allowed bg-slate-100' : ''
-                    }`}
-                  />
-                </div>
+                <EditorField
+                  label="Fin"
+                  disabled={exp.current}
+                  value={exp.current ? 'Presente' : exp.endDate}
+                  onChange={(val) => handleUpdate(exp.id, 'endDate', val)}
+                  placeholder="2024-01"
+                />
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 pt-1">
               <input
                 type="checkbox"
                 id={`current-${exp.id}`}
                 checked={exp.current}
                 onChange={(e) => handleUpdate(exp.id, 'current', e.target.checked)}
-                className="w-3.5 h-3.5 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
+                className="w-3.5 h-3.5 text-blue-600 rounded border-slate-300 dark:border-slate-700 focus:ring-blue-500"
               />
-              <label htmlFor={`current-${exp.id}`} className="text-xs text-slate-700 cursor-pointer select-none">
+              <label
+                htmlFor={`current-${exp.id}`}
+                className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+              >
                 Actualmente trabajo aquí
               </label>
             </div>
 
-            <div>
-              <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                Responsabilidades y Logros Destacados
-              </label>
-              <textarea
-                rows={3}
-                value={exp.description}
-                onChange={(e) => handleUpdate(exp.id, 'description', e.target.value)}
-                placeholder="• Lideré el equipo técnico...&#10;• Reduje la latencia en un 40%..."
-                className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition resize-y"
-              />
-            </div>
-          </div>
+            <EditorField
+              as="textarea"
+              label="Responsabilidades y Logros Destacados"
+              rows={3}
+              value={exp.description}
+              onChange={(val) => handleUpdate(exp.id, 'description', val)}
+              placeholder="• Lideré el equipo técnico...&#10;• Reduje la latencia en un 40%..."
+            />
+          </ItemCard>
         ))}
 
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="w-full py-2.5 px-4 border border-dashed border-blue-400 bg-blue-50/50 hover:bg-blue-50 text-blue-700 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Añadir Experiencia Laboral</span>
-        </button>
+        <AddItemButton label="Añadir Experiencia Laboral" onClick={handleAdd} />
       </div>
     </SectionCard>
   );
