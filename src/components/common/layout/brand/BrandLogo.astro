@@ -1,0 +1,41 @@
+---
+/**
+ * src/components/common/layout/brand/BrandLogo.astro
+ * [COMPONENTE] Isotipo y wordmark centralizado de "CV Fácil".
+ * Punto único de inyección para la identidad de marca y futuras variantes de logotipo.
+ * Trazabilidad: US-11, US-19, TASK-8.3, specs/08-rediseno-landing.md
+ */
+
+import { FileText } from 'lucide-react';
+import { getRoute } from '../../../../services/browser/navigation';
+
+export interface Props {
+  href?: string;
+  className?: string;
+  showWordmark?: boolean;
+}
+
+const { href = getRoute('/'), className = '', showWordmark = true } = Astro.props;
+---
+
+<a
+  href={href}
+  class={`flex items-center gap-2.5 group focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-xl p-1 transition select-none ${className}`}
+  aria-label="Ir a la página de inicio de CV Fácil"
+>
+  <div
+    class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-violet-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 group-hover:shadow-indigo-500/25 transition-all duration-300"
+  >
+    <FileText className="w-4 h-4 stroke-[2.2]" />
+  </div>
+
+  {
+    showWordmark && (
+      <div class="flex flex-col">
+        <span class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white tracking-tight leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          CV Fácil
+        </span>
+      </div>
+    )
+  }
+</a>
