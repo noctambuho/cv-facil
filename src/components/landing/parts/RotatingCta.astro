@@ -1,0 +1,166 @@
+---
+/**
+ * src/components/landing/parts/RotatingCta.astro
+ * [COMPONENTE] Botón rotativo con efecto persiana hacia abajo que alterna entre Donar y Contratar cada 3 segundos.
+ * Pausa la animación al posar el cursor o recibir foco con teclado, y se despliega de forma estática con prefers-reduced-motion.
+ * Trazabilidad: US-15 (Criterios 15.3, 15.4, 15.5), TASK-8.8, specs/08-rediseno-landing.md
+ */
+
+import { Coffee, Send } from 'lucide-react';
+import { CAFECITO_URL, CONTACT_MAILTO_HREF } from '../../../data/siteLinks';
+
+export interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<div class={`rotating-cta-wrapper relative ${className}`}>
+  <!-- Grid contenedor donde ambas caras se superponen en la misma celda para alternar -->
+  <div class="rotating-cta-stage grid grid-cols-1 items-center justify-items-center sm:justify-items-start">
+    <!-- Cara A: Invitame un cafecito -->
+    <a
+      href={CAFECITO_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="rotating-cta-btn rotating-cta-a inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-[0_4px_16px_rgba(245,158,11,0.35)] transition-all select-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+      aria-label="Apoyar el proyecto con una donación en Cafecito"
+    >
+      <Coffee className="w-4 h-4 shrink-0" />
+      <span>Invitame un cafecito</span>
+    </a>
+
+    <!-- Cara B: Contacto / Desarrollo web -->
+    <a
+      href={CONTACT_MAILTO_HREF}
+      class="rotating-cta-btn rotating-cta-b inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-indigo-600 via-blue-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-[0_4px_16px_rgba(79,70,229,0.35)] transition-all select-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+      aria-label="Contactar a jotacé para desarrollo de sitios web"
+    >
+      <Send className="w-4 h-4 shrink-0" />
+      <span>¿Necesitás una web? Contactame</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  /*
+   * Animación de persiana hacia abajo (Shutter Drop)
+   * Duración total de ciclo: 6 segundos (3s para cada cara en loop continuo)
+   */
+  .rotating-cta-stage {
+    grid-template-areas: 'overlap';
+    min-height: 48px;
+  }
+
+  .rotating-cta-btn {
+    grid-area: overlap;
+  }
+
+  @keyframes shutter-drop-a {
+    0%, 45% {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+    48% {
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      visibility: hidden;
+    }
+    97% {
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+      visibility: hidden;
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+  }
+
+  @keyframes shutter-drop-b {
+    0%, 45% {
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+      visibility: hidden;
+    }
+    48% {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+    95% {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+    98% {
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      visibility: hidden;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+      visibility: hidden;
+    }
+  }
+
+  .rotating-cta-a {
+    animation: shutter-drop-a 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  .rotating-cta-b {
+    animation: shutter-drop-b 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  /* Pausar la rotación al pasar el cursor */
+  .rotating-cta-wrapper:hover .rotating-cta-btn {
+    animation-play-state: paused;
+  }
+
+  /*
+   * Si el usuario navega por teclado (focus-within):
+   * Desactivar el overlap para que ambos botones sean visibles e interactuables sin saltos
+   */
+  .rotating-cta-wrapper:focus-within .rotating-cta-stage {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .rotating-cta-wrapper:focus-within .rotating-cta-btn {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  /* Soporte de accesibilidad para preferencias de movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    .rotating-cta-stage {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .rotating-cta-btn {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+    }
+  }
+</style>
