@@ -7,8 +7,8 @@
  */
 
 import BaseLayout from '../components/common/layout/BaseLayout.astro';
-import Navbar from '../components/common/layout/Navbar.astro';
-import UnifiedFooter from '../components/common/layout/UnifiedFooter.astro';
+import LandingNavbar from '../components/common/layout/navbar/LandingNavbar.astro';
+import LandingFooter from '../components/common/layout/footer/LandingFooter.astro';
 import HeroSection from '../components/landing/HeroSection.astro';
 import HowItWorks from '../components/landing/HowItWorks.astro';
 import FeaturesGrid from '../components/landing/FeaturesGrid.astro';
@@ -20,7 +20,7 @@ import StartNow from '../components/landing/StartNow.astro';
   title="CV Fácil - Crear Currículum Vitae Gratis en PDF A4 Online (Sin Marca de Agua)"
   description="Crea, personaliza y descarga tu currículum profesional en formato PDF A4 en tiempo real. 100% gratuito, sin marcas de agua, con modo oscuro y almacenamiento local o Google Drive."
 >
-  <Navbar currentPath="/" />
+  <LandingNavbar />
 
   <main class="flex-1">
     <HeroSection />
@@ -32,5 +32,5 @@ import StartNow from '../components/landing/StartNow.astro';
 
   </main>
 
-  <UnifiedFooter />
+  <LandingFooter />
 </BaseLayout>
