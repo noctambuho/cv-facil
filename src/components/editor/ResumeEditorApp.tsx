@@ -9,9 +9,12 @@ import type {
 } from '../../types/cv';
 import { useEditorDocument } from './hooks/useEditorDocument';
 import { useAutoSave } from './hooks/useAutoSave';
+import { useDriveSessionBoot } from './hooks/useDriveSessionBoot';
 import { EditorToolbar } from './EditorToolbar';
 import { FloatingStyleDock } from './FloatingStyleDock';
 import { ExportModal } from './ExportModal';
+import { GoogleDriveConfigModal } from '../lobby/GoogleDriveConfigModal';
+import { googleDriveAdapter, setActiveProvider } from '../../services/storage';
 import { ProfileEditor } from './sections/ProfileEditor';
 import { ExperienceEditor } from './sections/ExperienceEditor';
 import { EducationEditor } from './sections/EducationEditor';
@@ -19,6 +22,7 @@ import { SkillsEditor } from './sections/SkillsEditor';
 import { LanguagesEditor } from './sections/LanguagesEditor';
 import { ResumeViewer } from '../preview/ResumeViewer';
 import { Edit3, Eye, ArrowLeft, Sparkles } from 'lucide-react';
+
 
 /**
  * ResumeEditorApp: Isla interactiva principal del Editor (/editor).
@@ -44,10 +48,19 @@ export const ResumeEditorApp: React.FC = () => {
     documentId,
   });
 
+  const { isDriveConfigModalOpen, setIsDriveConfigModalOpen } = useDriveSessionBoot();
+
   const [activeMobileTab, setActiveMobileTab] = useState<'editor' | 'preview'>('editor');
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
 
+  const handleConnectDrive = async (newClientId: string) => {
+    await googleDriveAdapter.authenticate(newClientId);
+    setActiveProvider('drive');
+    setIsDriveConfigModalOpen(false);
+  };
+
   // Apertura automática si la URL contenía &export=true
+
   useEffect(() => {
     if (isAutoExportRequested && !isLoading) {
       setIsExportModalOpen(true);
@@ -176,6 +189,15 @@ export const ResumeEditorApp: React.FC = () => {
         documentId={documentId}
         documentTitle={documentTitle}
       />
+
+      {/* Diálogo de Configuración Directa de Google Drive (US-12, TASK-8.4) */}
+      <GoogleDriveConfigModal
+        isOpen={isDriveConfigModalOpen}
+        onClose={() => setIsDriveConfigModalOpen(false)}
+        onConnect={handleConnectDrive}
+        initialClientId={googleDriveAdapter.getClientId()}
+      />
+
 
       {/* Botón Flotante Móvil Alternar Vista */}
       <div className="no-print lg:hidden fixed bottom-5 left-5 z-40">
