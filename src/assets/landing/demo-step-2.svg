@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%" fill="none">
+  <!-- Fondo ventana de editor -->
+  <rect width="800" height="500" rx="20" fill="#0f172a"/>
+  <!-- Barra superior -->
+  <rect width="800" height="42" rx="20" fill="#1e293b"/>
+  <circle cx="28" cy="21" r="5" fill="#f43f5e"/>
+  <circle cx="44" cy="21" r="5" fill="#f59e0b"/>
+  <circle cx="60" cy="21" r="5" fill="#10b981"/>
+  <rect x="300" y="14" width="200" height="14" rx="7" fill="#334155"/>
+  <text x="400" y="24" font-size="9" font-family="sans-serif" font-weight="bold" fill="#94a3b8" text-anchor="middle">Paso 2: Personalizar Diseño</text>
+
+  <!-- Lienzo A4 centrado -->
+  <rect x="250" y="65" width="300" height="415" rx="10" fill="#ffffff" filter="drop-shadow(0 15px 30px rgba(0,0,0,0.6))"/>
+  <!-- Cabecera moderna con acento de color -->
+  <rect x="250" y="65" width="300" height="48" rx="10" fill="#7c3aed"/>
+  <circle cx="290" cy="89" r="18" fill="#ffffff"/>
+  <circle cx="290" cy="89" r="15" fill="#a78bfa"/>
+  <rect x="320" y="78" width="130" height="12" rx="3" fill="#ffffff"/>
+  <rect x="320" y="94" width="90" height="6" rx="2" fill="#ede9fe"/>
+  <!-- Contenido A4 -->
+  <rect x="275" y="130" width="250" height="6" rx="2" fill="#64748b"/>
+  <rect x="275" y="142" width="230" height="6" rx="2" fill="#94a3b8"/>
+  <rect x="275" y="165" width="100" height="8" rx="2" fill="#0f172a"/>
+  <line x1="275" y1="178" x2="525" y2="178" stroke="#e2e8f0" stroke-width="1.5"/>
+  <rect x="275" y="190" width="130" height="6" rx="2" fill="#1e293b"/>
+  <rect x="275" y="202" width="240" height="5" rx="2" fill="#64748b"/>
+
+  <!-- Dock de estilos flotante (FloatingStyleDock) destacado en esquina inferior derecha -->
+  <g transform="translate(560, 220)" filter="drop-shadow(0 15px 35px rgba(0,0,0,0.6))">
+    <rect width="210" height="250" rx="18" fill="#1e293b" stroke="#6366f1" stroke-width="2"/>
+    <rect x="18" y="18" width="100" height="10" rx="3" fill="#ffffff"/>
+    <text x="18" y="27" font-size="10" font-family="sans-serif" font-weight="bold" fill="#f8fafc">Estilo y Plantilla</text>
+
+    <!-- Selector de Plantilla -->
+    <rect x="18" y="44" width="174" height="28" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+    <text x="30" y="61" font-size="10" font-family="sans-serif" font-weight="bold" fill="#a5b4fc">Moderna (A4)</text>
+
+    <!-- Paleta de 6 Colores -->
+    <text x="18" y="95" font-size="9" font-family="sans-serif" fill="#94a3b8">Color de acento</text>
+    <circle cx="32" cy="114" r="10" fill="#2563eb"/>
+    <circle cx="58" cy="114" r="10" fill="#4f46e5"/>
+    <circle cx="84" cy="114" r="12" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="110" cy="114" r="10" fill="#059669"/>
+    <circle cx="136" cy="114" r="10" fill="#dc2626"/>
+    <circle cx="162" cy="114" r="10" fill="#0f172a"/>
+
+    <!-- Selector Tipografía -->
+    <text x="18" y="148" font-size="9" font-family="sans-serif" fill="#94a3b8">Familia tipográfica</text>
+    <rect x="18" y="158" width="174" height="28" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+    <text x="30" y="175" font-size="10" font-family="sans-serif" fill="#f8fafc">Inter (Moderna)</text>
+
+    <!-- Indicador de cambio en vivo -->
+    <rect x="18" y="202" width="174" height="30" rx="10" fill="#4f46e5"/>
+    <text x="105" y="221" font-size="11" font-family="sans-serif" font-weight="bold" fill="#ffffff" text-anchor="middle">✓ Aplicado en vivo</text>
+  </g>
+</svg>

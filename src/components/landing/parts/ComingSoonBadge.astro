@@ -1,0 +1,20 @@
+---
+/**
+ * src/components/landing/parts/ComingSoonBadge.astro
+ * [COMPONENTE] Insignia visual sutil para funcionalidades en desarrollo próximo.
+ * Trazabilidad: US-14, US-15, TASK-8.8, specs/08-rediseno-landing.md
+ */
+
+export interface Props {
+  text?: string;
+  className?: string;
+}
+
+const { text = 'Próximamente', className = '' } = Astro.props;
+---
+
+<span
+  class={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 shadow-2xs select-none ${className}`}
+>
+  {text}
+</span>

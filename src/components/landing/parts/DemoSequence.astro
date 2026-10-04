@@ -1,0 +1,143 @@
+---
+/**
+ * src/components/landing/parts/DemoSequence.astro
+ * [COMPONENTE] Secuencia animada de demostración del flujo de trabajo con crossfade CSS puro.
+ * Conduce al usuario a través de los 3 pasos clave sin dependencias pesadas de JS.
+ * Trazabilidad: US-14 (Criterio 14.2), TASK-8.7, specs/08-rediseno-landing.md
+ */
+
+import { Image } from 'astro:assets';
+import demoStep1 from '../../../assets/landing/demo-step-1.svg';
+import demoStep2 from '../../../assets/landing/demo-step-2.svg';
+import demoStep3 from '../../../assets/landing/demo-step-3.svg';
+
+const frames = [
+  { src: demoStep1, alt: 'Paso 1: Completar formulario interactivo con experiencia y habilidades', badge: '1. Completá tus datos' },
+  { src: demoStep2, alt: 'Paso 2: Personalizar plantilla, colores y tipografía con el dock flotante', badge: '2. Diseñá a tu gusto' },
+  { src: demoStep3, alt: 'Paso 3: Exportar y descargar PDF optimizado o guardar en Drive', badge: '3. Descargá tu CV' },
+];
+---
+
+<div class="demo-sequence-container relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl">
+  <!-- Barra superior indicadora de pasos activos -->
+  <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-800 bg-slate-900/90 backdrop-blur-sm z-20 relative">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+      <span class="ml-2 text-xs font-semibold text-slate-400">Demostración en acción</span>
+    </div>
+
+    <!-- Indicador de pasos -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      {
+        frames.map((frame, index) => (
+          <span
+            class={`demo-step-pill demo-step-pill-${index + 1} px-2.5 py-1 rounded-full text-[11px] font-bold transition-all`}
+          >
+            {frame.badge}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Contenedor de visualización con aspect ratio 16:10 -->
+  <div class="relative w-full aspect-[16/10] bg-slate-950">
+    {
+      frames.map((frame, index) => (
+        <div
+          class={`demo-frame demo-frame-${index + 1} absolute inset-0 w-full h-full flex items-center justify-center p-2 sm:p-4`}
+        >
+          <Image
+            src={frame.src}
+            alt={frame.alt}
+            class="w-full h-full object-contain rounded-xl select-none"
+            loading="lazy"
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  /*
+   * Ciclo de animación de 12 segundos (4s por cada uno de los 3 pasos)
+   * 0% a 30%: Frame 1 visible
+   * 33% a 63%: Frame 2 visible
+   * 66% a 96%: Frame 3 visible
+   */
+  @keyframes crossfade-1 {
+    0%, 30% { opacity: 1; z-index: 10; }
+    33.3%, 96.6% { opacity: 0; z-index: 1; }
+    100% { opacity: 1; z-index: 10; }
+  }
+
+  @keyframes crossfade-2 {
+    0%, 30% { opacity: 0; z-index: 1; }
+    33.3%, 63.3% { opacity: 1; z-index: 10; }
+    66.6%, 100% { opacity: 0; z-index: 1; }
+  }
+
+  @keyframes crossfade-3 {
+    0%, 63.3% { opacity: 0; z-index: 1; }
+    66.6%, 96.6% { opacity: 1; z-index: 10; }
+    100% { opacity: 0; z-index: 1; }
+  }
+
+  @keyframes pill-glow-1 {
+    0%, 30%, 100% { background-color: rgba(99, 102, 241, 0.25); color: #c7d2fe; border: 1px solid rgba(99, 102, 241, 0.5); }
+    33.3%, 96.6% { background-color: transparent; color: #64748b; border: 1px solid transparent; }
+  }
+
+  @keyframes pill-glow-2 {
+    0%, 30%, 66.6%, 100% { background-color: transparent; color: #64748b; border: 1px solid transparent; }
+    33.3%, 63.3% { background-color: rgba(99, 102, 241, 0.25); color: #c7d2fe; border: 1px solid rgba(99, 102, 241, 0.5); }
+  }
+
+  @keyframes pill-glow-3 {
+    0%, 63.3%, 100% { background-color: transparent; color: #64748b; border: 1px solid transparent; }
+    66.6%, 96.6% { background-color: rgba(99, 102, 241, 0.25); color: #c7d2fe; border: 1px solid rgba(99, 102, 241, 0.5); }
+  }
+
+  .demo-frame-1 { animation: crossfade-1 12s infinite; }
+  .demo-frame-2 { animation: crossfade-2 12s infinite; }
+  .demo-frame-3 { animation: crossfade-3 12s infinite; }
+
+  .demo-step-pill-1 { animation: pill-glow-1 12s infinite; }
+  .demo-step-pill-2 { animation: pill-glow-2 12s infinite; }
+  .demo-step-pill-3 { animation: pill-glow-3 12s infinite; }
+
+  /* Pausa en interacción al posar cursor o foco */
+  .demo-sequence-container:hover .demo-frame,
+  .demo-sequence-container:hover .demo-step-pill,
+  .demo-sequence-container:focus-within .demo-frame,
+  .demo-sequence-container:focus-within .demo-step-pill {
+    animation-play-state: paused;
+  }
+
+  /* Soporte de accesibilidad para movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    .demo-frame-1 {
+      opacity: 1 !important;
+      z-index: 10 !important;
+      animation: none !important;
+    }
+    .demo-frame-2,
+    .demo-frame-3 {
+      display: none !important;
+      animation: none !important;
+    }
+    .demo-step-pill-1 {
+      background-color: rgba(99, 102, 241, 0.25) !important;
+      color: #c7d2fe !important;
+      animation: none !important;
+    }
+    .demo-step-pill-2,
+    .demo-step-pill-3 {
+      animation: none !important;
+      color: #64748b !important;
+    }
+  }
+</style>

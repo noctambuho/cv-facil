@@ -1,0 +1,86 @@
+---
+/**
+ * src/components/landing/HowItWorks.astro
+ * [COMPONENTE] Sección interactiva "Cómo funciona": 3 pasos guiados y secuencia de demostración animada.
+ * Reemplaza a CompetitiveAdvantage.astro según la arquitectura v2.2.
+ * Trazabilidad: US-14, TASK-8.7, specs/08-rediseno-landing.md
+ */
+
+import { ClipboardList, Palette, Download, Sparkles } from 'lucide-react';
+import { HOW_IT_WORKS_DATA } from '../../data/landing';
+import DemoSequence from './parts/DemoSequence.astro';
+import ComingSoonBadge from './parts/ComingSoonBadge.astro';
+
+const iconMap = {
+  ClipboardList,
+  Palette,
+  Download,
+};
+---
+
+<section id="como-funciona" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12 sm:space-y-16">
+  <!-- Encabezado de Sección -->
+  <div class="text-center max-w-3xl mx-auto space-y-3">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200/80 dark:border-indigo-800/80 text-indigo-700 dark:text-indigo-300 text-xs font-bold shadow-2xs">
+      <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+      <span>{HOW_IT_WORKS_DATA.tag}</span>
+    </div>
+
+    <h2 class="serif-title text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 dark:text-white tracking-tight">
+      {HOW_IT_WORKS_DATA.title}
+    </h2>
+
+    <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+      {HOW_IT_WORKS_DATA.subtitle}
+    </p>
+  </div>
+
+  <!-- Cuadrícula de 3 Pasos Clave -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+    {
+      HOW_IT_WORKS_DATA.steps.map((step, idx) => {
+        const IconComponent = iconMap[step.icon];
+        return (
+          <div class="relative p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-ambient flex flex-col justify-between hover:-translate-y-1 transition-all duration-300 group">
+            <div class="space-y-4">
+              <!-- Número de paso e icono -->
+              <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <IconComponent className="w-6 h-6" />
+                </div>
+                <span class="text-2xl font-black text-slate-200 dark:text-slate-800 select-none">
+                  0{idx + 1}
+                </span>
+              </div>
+
+              <!-- Título del paso -->
+              <h3 class="serif-title text-xl font-bold text-slate-900 dark:text-white pt-1">
+                {step.title}
+              </h3>
+
+              <!-- Descripción -->
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                {step.description}
+              </p>
+            </div>
+
+            <!-- Badges complementarios -->
+            {step.comingSoon && step.comingSoon.length > 0 && (
+              <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                  {step.comingSoon.join(', ')}:
+                </span>
+                <ComingSoonBadge />
+              </div>
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <!-- Demostración en Acción (DemoSequence) -->
+  <div class="pt-2 sm:pt-4">
+    <DemoSequence />
+  </div>
+</section>
