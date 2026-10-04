@@ -376,42 +376,42 @@ sequenceDiagram
 > Reglas: un commit por tarea según `commit-policy.md`; antes de cada tarea de UI se consulta la skill `modern-web-guidance`; comentarios etiquetados según `code-readability.md`; ningún archivo de más de 200 líneas.
 
 ### Hito A · Gobernanza y Contratos
-- [ ] **TASK-8.0: Gobernanza SDD**
+- [x] **TASK-8.0: Gobernanza SDD**
   - Aprobar este documento (Gates 1-3). Agregar en `04` una nota de revisión en US-06 → `08`. Actualizar el mapa de directorios de `07`.
   - **DoD:** specs sincronizadas. Commit `spec(sdd): …`.
-- [ ] **TASK-8.1: Contratos, datos y dominio**
+- [x] **TASK-8.1: Contratos, datos y dominio**
   - `src/types/landing.ts`, `src/data/siteLinks.ts`, `src/data/landing.ts`, `src/domain/mailto.ts`, `tests/domain/mailto.test.ts` (codificación de asunto y cuerpo, sin inyección de headers con `\r\n`).
   - **DoD:** `npm test` y `npm run build` en verde.
 
 ### Hito B · Reestructuración de `common/layout`
-- [ ] **TASK-8.2: Subcarpetas y movimientos**
+- [x] **TASK-8.2: Subcarpetas y movimientos**
   - Mover `Navbar.astro` → `navbar/` (marcado `@deprecated`) y `UnifiedFooter.astro` → `footer/`; actualizar los imports en `lobby.astro` y `editor.astro`.
   - Crear los stubs `LobbyNavbar.astro` y `EditorNavbar.astro` (solo `<header>` vacío + docblock).
   - **DoD:** build OK; `/lobby` y `/editor` visualmente idénticos (captura antes y después).
-- [ ] **TASK-8.3: Marca**
+- [x] **TASK-8.3: Marca**
   - `brand/BrandLogo.astro` (isotipo actual + wordmark) y `brand/GitHubMark.astro` con animación hover/focus y fallback de movimiento reducido.
   - **DoD:** Criterio 11.3 verificado en el navegador.
 
 ### Hito C · Acceso con Google
-- [ ] **TASK-8.4: Traspaso de sesión**
+- [x] **TASK-8.4: Traspaso de sesión**
   - `services/storage/driveSessionHandoff.ts` (`save` / `consume` con TTL), enmienda documental en `driveTokenStore.ts`, y `editor/hooks/useDriveSessionBoot.ts` (consume el traspaso y maneja `?drive=config`) integrado en `ResumeEditorApp`.
   - **DoD:** Criterios 12.4 y 12.5; el traspaso desaparece de `sessionStorage` tras cargar el editor.
-- [ ] **TASK-8.5: LandingNavbar + GoogleDriveSignInButton**
+- [x] **TASK-8.5: LandingNavbar + GoogleDriveSignInButton**
   - Logo oficial de Drive (SVG multicolor), estados idle/cargando/error, redirección a `/editor`.
   - **DoD:** Criterios 11.1, 11.2, 12.1-12.3 verificados en desktop (1280 px) y mobile (375 px).
 
 ### Hito D · Secciones
-- [ ] **TASK-8.6: HeroSection** — reescritura + `hero-banner-placeholder.svg` + `<Image>`. **DoD:** 13.1-13.3.
-- [ ] **TASK-8.7: HowItWorks + DemoSequence** — eliminar `CompetitiveAdvantage.astro`. **DoD:** 14.1-14.3.
-- [ ] **TASK-8.8: FeaturesGrid + RotatingCta + ComingSoonBadge.** **DoD:** 15.1-15.5 (incluye emular `prefers-reduced-motion`).
-- [ ] **TASK-8.9: AboutTheProject** — placeholders de narrativa; eliminar `SuccessStories.astro`. **DoD:** 16.1-16.3.
-- [ ] **TASK-8.10: StartNow** — generar la ilustración (§8.2) en `src/assets/landing/`; eliminar `DonationBanner.astro`. **DoD:** 17.1-17.2.
-- [ ] **TASK-8.11: LandingFooter.** **DoD:** 18.1-18.2.
-- [ ] **TASK-8.12: Integración de `index.astro` + SEO en voseo** (`SEO.astro` acepta `featureList` opcional). **DoD:** orden de secciones según §1, sin imports huérfanos.
+- [x] **TASK-8.6: HeroSection** — reescritura + `hero-banner-placeholder.svg` + `<Image>`. **DoD:** 13.1-13.3.
+- [x] **TASK-8.7: HowItWorks + DemoSequence** — eliminar `CompetitiveAdvantage.astro`. **DoD:** 14.1-14.3.
+- [x] **TASK-8.8: FeaturesGrid + RotatingCta + ComingSoonBadge.** **DoD:** 15.1-15.5 (incluye emular `prefers-reduced-motion`).
+- [x] **TASK-8.9: AboutTheProject** — placeholders de narrativa; eliminar `SuccessStories.astro`. **DoD:** 16.1-16.3.
+- [x] **TASK-8.10: StartNow** — generar la ilustración (§8.2) en `src/assets/landing/`; eliminar `DonationBanner.astro`. **DoD:** 17.1-17.2.
+- [x] **TASK-8.11: LandingFooter.** **DoD:** 18.1-18.2.
+- [x] **TASK-8.12: Integración de `index.astro` + SEO en voseo** (`SEO.astro` acepta `featureList` opcional). **DoD:** orden de secciones según §1, sin imports huérfanos.
 
 ### Hito E · Identidad y Cierre
-- [ ] **TASK-8.13: Exploración de logo en Stitch** (paralelizable, sin cambios de código) — proyecto "CV Fácil — Identidad", 5 opciones, entregadas como capturas para evaluar. **DoD:** 19.1.
-- [ ] **TASK-8.14: Validación y RTM** — `npm test`, `npm run build`, verificación en el navegador (claro/oscuro, 375/768/1280 px, teclado, movimiento reducido), Lighthouse de accesibilidad ≥ 95 en `/`, y matriz de trazabilidad US-11…US-19 → evidencia.
+- [x] **TASK-8.13: Exploración de logo en Stitch** (paralelizable, sin cambios de código) — proyecto "CV Fácil — Identidad", 5 opciones, entregadas como capturas para evaluar. **DoD:** 19.1.
+- [x] **TASK-8.14: Validación y RTM** — `npm test`, `npm run build`, verificación en el navegador (claro/oscuro, 375/768/1280 px, teclado, movimiento reducido), Lighthouse de accesibilidad ≥ 95 en `/`, y matriz de trazabilidad US-11…US-19 → evidencia.
 
 ### Backlog posterior (bloqueado por insumos)
 - Aplicar el logo elegido en `BrandLogo.astro` y en `favicon.svg`.
