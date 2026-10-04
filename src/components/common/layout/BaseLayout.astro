@@ -13,9 +13,10 @@ export interface Props {
   description?: string;
   canonicalUrl?: string;
   ogType?: 'website' | 'article';
+  featureList?: string[];
 }
 
-const { title, description, canonicalUrl, ogType } = Astro.props;
+const { title, description, canonicalUrl, ogType, featureList } = Astro.props;
 
 const baseUrl = import.meta.env.BASE_URL;
 const faviconUrl = `${baseUrl.replace(/\/$/, '')}/favicon.svg`;
@@ -54,7 +55,13 @@ const faviconUrl = `${baseUrl.replace(/\/$/, '')}/favicon.svg`;
     />
 
     <!-- Componente de Metadatos SEO y JSON-LD -->
-    <SEO title={title} description={description} canonicalUrl={canonicalUrl} ogType={ogType} />
+    <SEO
+      title={title}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      ogType={ogType}
+      featureList={featureList}
+    />
 
     <!-- Google Fonts con preconexión -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

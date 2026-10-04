@@ -14,11 +14,12 @@ import HowItWorks from '../components/landing/HowItWorks.astro';
 import FeaturesGrid from '../components/landing/FeaturesGrid.astro';
 import AboutTheProject from '../components/landing/AboutTheProject.astro';
 import StartNow from '../components/landing/StartNow.astro';
+import { SEO_LANDING_DATA } from '../data/landing';
 ---
 
 <BaseLayout
-  title="CV Fácil - Crear Currículum Vitae Gratis en PDF A4 Online (Sin Marca de Agua)"
-  description="Crea, personaliza y descarga tu currículum profesional en formato PDF A4 en tiempo real. 100% gratuito, sin marcas de agua, con modo oscuro y almacenamiento local o Google Drive."
+  title={SEO_LANDING_DATA.title}
+  description={SEO_LANDING_DATA.description}
 >
   <LandingNavbar />
 

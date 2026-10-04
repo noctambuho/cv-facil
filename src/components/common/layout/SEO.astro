@@ -10,6 +10,7 @@ export interface Props {
   description?: string;
   canonicalUrl?: string;
   ogType?: 'website' | 'article';
+  featureList?: string[];
 }
 
 const {
@@ -17,6 +18,13 @@ const {
   description = 'Crea, edita y descarga tu currículum vitae profesional en formato PDF A4 en tiempo real. 100% gratuito, sin marcas de agua y con privacidad total.',
   canonicalUrl = Astro.url.href,
   ogType = 'website',
+  featureList = [
+    'Generador de CV en tiempo real en formato A4',
+    'Sin marcas de agua',
+    'Soberanía de datos: Almacenamiento local o Google Drive BYOS',
+    'Optimización de tamaño de PDF < 2MB para portales ATS',
+    'Modo oscuro nativo',
+  ],
 } = Astro.props;
 
 const baseUrl = import.meta.env.BASE_URL;
@@ -36,13 +44,7 @@ const schemaJsonLd = {
     'priceCurrency': 'USD',
   },
   'description': description,
-  'featureList': [
-    'Generador de CV en tiempo real en formato A4',
-    'Sin marcas de agua',
-    'Soberanía de datos: Almacenamiento local o Google Drive BYOS',
-    'Optimización de tamaño de PDF < 2MB para portales ATS',
-    'Modo oscuro nativo'
-  ],
+  'featureList': featureList,
 };
 ---
 
