@@ -24,9 +24,15 @@ Esta versión extiende las historias de la línea base (`US-01` a `US-05`) con l
 ---
 
 ### US-06: Landing Page de "CV Fácil" y Llamados a la Acción (CTA)
+
+> [!NOTE]
+> **Revisión SDD (Delta Spec v2.2.0):**  
+> Los criterios 6.1, 6.2 y 6.3 han sido reemplazados y superados para la Landing Page (`/`) por las historias US-11 a US-18 especificadas en [08-rediseno-landing.md](08-rediseno-landing.md). Lobby y Editor conservan `UnifiedFooter.astro`.
+
 **Como** visitante en búsqueda de empleo o de una herramienta de redacción de CV,  
 **quiero** acceder a una página de bienvenida luminosa, moderna y transparente,  
 **para** comprender la propuesta de valor, acceder al código fuente, apoyar el proyecto con donaciones y comenzar de inmediato.
+
 
 * **Criterio 6.1 (Navegación y Acceso Directo Constante):**  
   * *Dado* un visitante en la Landing Page,  
