@@ -1,0 +1,18 @@
+---
+/**
+ * src/components/common/layout/navbar/LobbyNavbar.astro
+ * [COMPONENTE] Barra de navegación especializada para el Lobby de CV Fácil.
+ * Trazabilidad: TASK-8.2, US-11 (Criterio 11.4), specs/08-rediseno-landing.md
+ *
+ * NOTA: Stub preparado para la especialización visual e interactiva del Lobby en versiones posteriores.
+ */
+
+export interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/lobby' } = Astro.props;
+---
+
+<!-- Stub LobbyNavbar: La implementación definitiva reemplazará a Navbar.astro en v2.3 -->
+<header data-testid="lobby-navbar-stub" class="hidden" aria-hidden="true" data-path={currentPath}></header>

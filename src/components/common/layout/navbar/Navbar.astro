@@ -1,0 +1,142 @@
+---
+/**
+ * src/components/common/layout/navbar/Navbar.astro
+ * Barra de navegación principal con branding "CV Fácil", badge "Open Source",
+ * enlaces de navegación, switch de tema y estado de sesión.
+ *
+ * @deprecated En v2.2.0 se desacopla para dar lugar a LandingNavbar, LobbyNavbar y EditorNavbar.
+ * Se mantiene activo para /lobby y /editor para garantizar estabilidad visual sin regresiones.
+ *
+ * Trazabilidad: US-06, US-07, US-10, TASK-8.2
+ */
+
+import { FileText, ArrowRight, FolderKanban, Edit3 } from 'lucide-react';
+import { ThemeToggle } from '../ThemeToggle';
+import { getRoute } from '../../../../services/browser/navigation';
+
+export interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+
+const landingHref = getRoute('/');
+const lobbyHref = getRoute('/lobby');
+const editorHref = getRoute('/editor');
+
+const isHome = currentPath === landingHref || currentPath === '/' || currentPath === '';
+const isLobby = currentPath.includes('/lobby');
+const isEditor = currentPath.includes('/editor');
+
+/** Dentro de la app el usuario ya está "trabajando" → el isotipo lleva al Lobby */
+const isInsideApp = isLobby || isEditor;
+const brandHref = isInsideApp ? lobbyHref : landingHref;
+
+/** "Inicio" lleva directamente a la landing principal */
+const inicioHref = landingHref;
+---
+
+<header class="no-print sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl transition-colors px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto h-14 sm:h-16 flex items-center justify-between gap-4">
+    <!-- Brand / Isotipo -->
+    <div class="flex items-center gap-3">
+      <a
+        href={brandHref}
+        class="flex items-center gap-2.5 group focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg p-1"
+        aria-label="Ir a la página de inicio de CV Fácil"
+      >
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-violet-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform duration-200">
+          <FileText className="w-4 h-4" />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white tracking-tight leading-tight">
+            CV Fácil
+          </span>
+        </div>
+      </a>
+
+      <!-- Badges complementarios de confianza -->
+      <span class="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60 shadow-2xs">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        ATS Ready & Local-First
+      </span>
+    </div>
+
+    <!-- Navegación central en pantallas medianas/grandes -->
+    <nav aria-label="Navegación principal" class="hidden sm:flex items-center gap-1 text-xs font-semibold">
+      <a
+        href={inicioHref}
+        class={`px-3 py-1.5 rounded-lg transition ${
+          isHome
+            ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+        }`}
+      >
+        Inicio
+      </a>
+      <a
+        href={lobbyHref}
+        class={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
+          isLobby
+            ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+        }`}
+      >
+        <FolderKanban className="w-3.5 h-3.5" />
+        <span>Mis CVs (Lobby)</span>
+      </a>
+      <a
+        href={editorHref}
+        class={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
+          isEditor
+            ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+        }`}
+      >
+        <Edit3 className="w-3.5 h-3.5" />
+        <span>Editor</span>
+      </a>
+    </nav>
+
+    <!-- Acciones Derecha (ThemeToggle + CTA) -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Botón de Tema (Isla React) -->
+      <ThemeToggle client:load />
+
+      <!-- Botón de GitHub con SVG nativo -->
+      <a
+        href="https://github.com/noctambuho/cv-facil"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden sm:inline-flex p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+        title="Código fuente en GitHub"
+        aria-label="Repositorio de GitHub"
+      >
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+        </svg>
+      </a>
+
+      <!-- CTA Principal dinámico según página -->
+      {
+        !isLobby ? (
+          <a
+            href={lobbyHref}
+            class="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold text-xs rounded-xl shadow-[0_4px_14px_rgba(79,70,229,0.3)] transition transform active:scale-95"
+          >
+            <span>Mis CVs</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        ) : (
+          <a
+            href={editorHref}
+            class="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold text-xs rounded-xl shadow-[0_4px_14px_rgba(79,70,229,0.3)] transition transform active:scale-95"
+          >
+            <span>Crear CV</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        )
+      }
+    </div>
+  </div>
+</header>
