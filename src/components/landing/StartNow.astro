@@ -1,0 +1,66 @@
+---
+/**
+ * src/components/landing/StartNow.astro
+ * [COMPONENTE] Sección de conversión final: llamado a la acción editorial e ilustración de superación de filtros ATS.
+ * Trazabilidad: US-17, TASK-8.10, specs/08-rediseno-landing.md
+ */
+
+import { Image } from 'astro:assets';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { START_NOW_DATA } from '../../data/landing';
+import { getRoute } from '../../services/browser/navigation';
+import startNowIllustration from '../../assets/landing/start-now.svg';
+
+const editorHref = getRoute('/editor');
+---
+
+<section class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+  <div class="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 p-8 sm:p-14 lg:p-16 text-white shadow-2xl border border-indigo-900/50">
+    <!-- Textura de fondo sutil y orbe luminoso -->
+    <div
+      class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"
+      style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.8) 1px, transparent 0); background-size: 32px 32px;"
+      aria-hidden="true"
+    ></div>
+    <div class="absolute -top-20 -right-20 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12">
+      <!-- Columna Izquierda: Mensaje y Botón CTA -->
+      <div class="flex-1 text-center lg:text-left space-y-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30 backdrop-blur-md">
+          <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+          <span>Comenzá en minutos</span>
+        </div>
+
+        <div class="space-y-3">
+          <h2 class="serif-title text-3xl sm:text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-[1.18]">
+            {START_NOW_DATA.headline}
+          </h2>
+          <p class="text-lg sm:text-xl text-indigo-200/90 font-medium">
+            {START_NOW_DATA.subheadline}
+          </p>
+        </div>
+
+        <div class="pt-2 flex justify-center lg:justify-start">
+          <a
+            href={editorHref}
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 via-blue-500 to-violet-500 hover:from-indigo-400 hover:to-violet-400 active:scale-[0.98] text-white font-bold text-base sm:text-lg shadow-[0_12px_30px_rgba(99,102,241,0.4)] transition-all duration-200 select-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-400"
+          >
+            <span>{START_NOW_DATA.ctaText}</span>
+            <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Ilustración conceptual ATS -->
+      <div class="flex-1 w-full max-w-sm sm:max-w-md flex justify-center">
+        <Image
+          src={startNowIllustration}
+          alt={START_NOW_DATA.illustrationAlt}
+          class="w-full h-auto drop-shadow-2xl select-none"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</section>

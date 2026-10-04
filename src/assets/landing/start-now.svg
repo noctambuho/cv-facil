@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Gradiente de fondo del embudo ATS -->
+    <linearGradient id="funnelGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Resplandor del CV destacado -->
+    <radialGradient id="highlightGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#6366f1" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Gradiente de acento del CV ganador -->
+    <linearGradient id="winnerCvGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+
+    <!-- Sombra del CV destacado -->
+    <filter id="glowShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#4f46e5" flood-opacity="0.35"/>
+    </filter>
+    <filter id="subtleShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Halo de resplandor triunfal -->
+  <circle cx="420" cy="225" r="180" fill="url(#highlightGlow)"/>
+
+  <!-- ==================== EMBUDO / ESCÁNER ROBÓTICO (ATS) ==================== -->
+  <g transform="translate(180, 75)">
+    <!-- Haz de escaneo lumínico (Scan lines) -->
+    <polygon points="40,20 180,20 160,260 60,260" fill="#6366f1" fill-opacity="0.08"/>
+    <line x1="45" y1="90" x2="175" y2="90" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="4 4" stroke-opacity="0.4"/>
+    <line x1="50" y1="150" x2="170" y2="150" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 4" stroke-opacity="0.5"/>
+    <line x1="55" y1="210" x2="165" y2="210" stroke="#10b981" stroke-width="2" stroke-opacity="0.7"/>
+
+    <!-- Marcos del portal de filtrado -->
+    <path d="M20 10L60 20V280L20 290V10Z" fill="url(#funnelGrad)" stroke="#334155" stroke-width="1.5"/>
+    <path d="M200 10L160 20V280L200 290V10Z" fill="url(#funnelGrad)" stroke="#334155" stroke-width="1.5"/>
+
+    <!-- Sensores del bot -->
+    <circle cx="40" cy="50" r="5" fill="#f43f5e"/>
+    <circle cx="40" cy="150" r="5" fill="#fbbf24"/>
+    <circle cx="40" cy="250" r="5" fill="#10b981"/>
+    <circle cx="180" cy="50" r="5" fill="#f43f5e"/>
+    <circle cx="180" cy="150" r="5" fill="#fbbf24"/>
+    <circle cx="180" cy="250" r="5" fill="#10b981"/>
+  </g>
+
+  <!-- ==================== CVS DESCARTADOS (DESENFOCADOS / GRISES) ==================== -->
+  <!-- CV Descartado 1 (Izquierda abajo, caído) -->
+  <g transform="translate(40, 240) rotate(-18 80 110)" opacity="0.4">
+    <rect width="130" height="180" rx="8" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+    <rect x="15" y="18" width="60" height="8" rx="2" fill="#94a3b8"/>
+    <rect x="15" y="32" width="100" height="5" rx="1.5" fill="#cbd5e1"/>
+    <rect x="15" y="42" width="90" height="5" rx="1.5" fill="#cbd5e1"/>
+    <circle cx="105" cy="24" r="10" fill="#cbd5e1"/>
+    <!-- Cruz roja de descarte -->
+    <circle cx="65" cy="90" r="18" fill="#fecdd3"/>
+    <path d="M57 82L73 98M73 82L57 98" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- CV Descartado 2 (Izquierda arriba, atascado) -->
+  <g transform="translate(60, 60) rotate(12 75 105)" opacity="0.45">
+    <rect width="130" height="180" rx="8" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+    <rect x="15" y="18" width="70" height="8" rx="2" fill="#94a3b8"/>
+    <rect x="15" y="32" width="100" height="5" rx="1.5" fill="#cbd5e1"/>
+    <rect x="15" y="42" width="95" height="5" rx="1.5" fill="#cbd5e1"/>
+    <!-- Cruz roja -->
+    <circle cx="65" cy="90" r="18" fill="#fecdd3"/>
+    <path d="M57 82L73 98M73 82L57 98" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- ==================== CV GANADOR QUE SUPERA EL FILTRO ==================== -->
+  <g transform="translate(320, 65) rotate(5 125 175)" filter="url(#glowShadow)">
+    <!-- Hoja A4 destacada y nítida -->
+    <rect width="210" height="295" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+    <!-- Franja de acento de marca -->
+    <path d="M0 12C0 5.37 5.37 0 12 0H198C204.63 0 210 5.37 210 12V36H0V12Z" fill="url(#winnerCvGrad)"/>
+
+    <!-- Cabecera -->
+    <rect x="20" y="48" width="100" height="10" rx="2" fill="#0f172a"/>
+    <rect x="20" y="62" width="70" height="5" rx="1.5" fill="#4f46e5"/>
+
+    <!-- Avatar profesional -->
+    <circle cx="175" cy="46" r="16" fill="#ffffff" stroke="#e0e7ff" stroke-width="2"/>
+    <circle cx="175" cy="46" r="13" fill="#818cf8"/>
+
+    <!-- Líneas de datos semánticos -->
+    <rect x="20" y="78" width="170" height="4" rx="1.5" fill="#64748b"/>
+    <rect x="20" y="86" width="155" height="4" rx="1.5" fill="#94a3b8"/>
+    <rect x="20" y="94" width="130" height="4" rx="1.5" fill="#cbd5e1"/>
+
+    <!-- Experiencia con viñetas esmeralda -->
+    <rect x="20" y="112" width="60" height="6" rx="1.5" fill="#1e293b"/>
+    <line x1="20" y1="122" x2="190" y2="122" stroke="#e2e8f0" stroke-width="1"/>
+    <circle cx="24" cy="132" r="2.5" fill="#10b981"/>
+    <rect x="32" y="130" width="140" height="4" rx="1" fill="#475569"/>
+    <circle cx="24" cy="142" r="2.5" fill="#10b981"/>
+    <rect x="32" y="140" width="130" height="4" rx="1" fill="#475569"/>
+
+    <circle cx="24" cy="156" r="2.5" fill="#10b981"/>
+    <rect x="32" y="154" width="145" height="4" rx="1" fill="#475569"/>
+
+    <!-- Competencias destacadas (chips) -->
+    <rect x="20" y="172" width="45" height="6" rx="1.5" fill="#1e293b"/>
+    <rect x="20" y="184" width="45" height="12" rx="4" fill="#e0e7ff"/>
+    <rect x="70" y="184" width="55" height="12" rx="4" fill="#e0e7ff"/>
+    <rect x="130" y="184" width="50" height="12" rx="4" fill="#e0e7ff"/>
+
+    <!-- Badge de Aprobación ATS Flotante en esquina inferior derecha -->
+    <g transform="translate(110, 240)">
+      <rect width="90" height="24" rx="12" fill="#10b981" filter="url(#subtleShadow)"/>
+      <text x="45" y="16" font-size="10" font-family="sans-serif" font-weight="extrabold" fill="#ffffff" text-anchor="middle">✓ ATS PASS</text>
+    </g>
+  </g>
+
+  <!-- Destellos y estrellas alrededor del CV exitoso -->
+  <g fill="#fbbf24">
+    <path d="M540 80L543 90L553 93L543 96L540 106L537 96L527 93L537 90Z"/>
+    <path d="M330 330L332 337L339 339L332 341L330 348L328 341L321 339L328 337Z"/>
+    <path d="M510 380L512 386L518 388L512 390L510 396L508 390L502 388L508 386Z"/>
+  </g>
+</svg>
